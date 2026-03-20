@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zande — Accounting Made Easy for Everyone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cy:#22D3EE; --cy-dim:rgba(34,211,238,.1); --cy-b:rgba(34,211,238,.2);
+  --bg:#000; --s1:#0f0f0f; --s2:#181818; --s3:#222; --bd:#2a2a2a;
+  --t1:#f1f5f9; --t2:#64748b; --t3:#334155;
+  --gn:#10B981; --gd:rgba(16,185,129,.12); --gb:rgba(16,185,129,.22);
+  --rd:#EF4444; --rdd:rgba(239,68,68,.12);
+  --am:#F59E0B; --amd:rgba(245,158,11,.12);
+  --vi:#6366F1; --vid:rgba(99,102,241,.12);
+  --fd:'Syne',sans-serif; --fb:'Instrument Sans',sans-serif; --fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);scroll-behavior:smooth}
+body{font-family:var(--fb);color:var(--t1);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(34,211,238,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.018) 1px,transparent 1px);
+  background-size:56px 56px}
+.glow{position:fixed;top:-400px;left:50%;transform:translateX(-50%);width:1000px;height:700px;
+  border-radius:50%;background:radial-gradient(ellipse,rgba(34,211,238,.07) 0%,transparent 65%);
+  pointer-events:none;z-index:0}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+.wrap-sm{max-width:620px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd)}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--t1);text-decoration:none;display:flex;align-items:center;gap:7px}
+.logo-dot{width:7px;height:7px;border-radius:50%;background:var(--cy);animation:blink 2.4s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-pill{font-family:var(--fm);font-size:9px;letter-spacing:1.5px;color:var(--gn);
+  background:var(--gd);border:1px solid var(--gb);border-radius:20px;padding:5px 13px;text-transform:uppercase}
+.nav-cta{background:var(--cy);color:#000;border:none;border-radius:11px;padding:10px 22px;
+  font-size:13px;font-weight:700;font-family:var(--fd);cursor:pointer;transition:all .18s;letter-spacing:.2px}
+.nav-cta:hover{background:#38BDF8;transform:translateY(-1px);box-shadow:0 8px 24px rgba(34,211,238,.35)}
+
+/* HERO */
+.hero{padding:130px 0 60px}
+.hero-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:72px;align-items:center}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:52px}}
+
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--cy-dim);
+  border:1px solid var(--cy-b);border-radius:30px;padding:6px 16px;margin-bottom:28px;
+  font-family:var(--fm);font-size:10px;color:var(--cy);letter-spacing:.8px;
+  animation:fadeUp .5s .05s both}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:pdot 2s infinite}
+@keyframes pdot{0%{box-shadow:0 0 0 0 rgba(16,185,129,.6)}70%{box-shadow:0 0 0 8px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+
+h1.hero-h{font-family:var(--fd);font-size:clamp(42px,5.5vw,72px);font-weight:800;
+  line-height:1.02;letter-spacing:-2.5px;color:var(--t1);margin-bottom:22px;animation:fadeUp .5s .12s both}
+.grad{background:linear-gradient(120deg,var(--cy) 0%,#818CF8 55%,var(--gn) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:17px;color:var(--t2);line-height:1.72;margin-bottom:28px;
+  max-width:520px;animation:fadeUp .5s .2s both}
+.hero-sub strong{color:var(--t1);font-weight:600}
+
+.free-badge{display:flex;align-items:flex-start;gap:13px;
+  background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.04));
+  border:1px solid var(--gb);border-radius:14px;padding:14px 18px;
+  margin-bottom:30px;animation:fadeUp .5s .27s both;position:relative;overflow:hidden}
+.free-badge::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(16,185,129,.5),transparent)}
+.fb-em{font-size:22px;flex-shrink:0;margin-top:1px}
+.fb-ttl{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--gn)}
+.fb-sub{font-size:12px;color:var(--t2);margin-top:3px;line-height:1.55}
+
+.form-wrap{animation:fadeUp .5s .34s both}
+.form-row{display:flex;gap:8px;margin-bottom:10px}
+@media(max-width:500px){.form-row{flex-direction:column}}
+.fi{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:11px;
+  padding:14px 16px;font-size:14px;color:var(--t1);font-family:var(--fb);outline:none;transition:border-color .18s}
+.fi:focus{border-color:var(--cy)}
+.fi::placeholder{color:var(--t3)}
+.cta-btn{background:var(--cy);color:#000;border:none;border-radius:11px;padding:14px 24px;
+  font-size:14px;font-weight:700;font-family:var(--fd);cursor:pointer;transition:all .2s;
+  white-space:nowrap;box-shadow:0 6px 22px rgba(34,211,238,.3)}
+.cta-btn:hover{background:#38BDF8;transform:translateY(-2px);box-shadow:0 12px 32px rgba(34,211,238,.45)}
+.cta-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.form-note{font-size:11px;color:var(--t3)}
+.form-note span{color:var(--gn)}
+
+.proof-row{display:flex;align-items:center;gap:12px;margin-top:22px;animation:fadeUp .5s .42s both}
+.avs{display:flex}
+.av{width:30px;height:30px;border-radius:50%;border:2px solid var(--bg);
+  font-family:var(--fd);font-size:9px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-left:-8px}
+.av:first-child{margin-left:0}
+.proof-t{font-size:13px;color:var(--t2)}
+.proof-t strong{font-family:var(--fm);font-size:13px;color:var(--cy)}
+
+.success-box{display:none;background:var(--s1);border:1px solid rgba(16,185,129,.3);
+  border-radius:14px;padding:26px;text-align:center}
+.s-icon{width:52px;height:52px;border-radius:12px;margin:0 auto 14px;
+  background:var(--gd);border:1px solid var(--gb);
+  display:flex;align-items:center;justify-content:center}
+.s-icon svg{width:22px;height:22px;stroke:var(--gn);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.success-box h3{font-family:var(--fd);font-size:18px;font-weight:800;color:var(--t1);margin-bottom:6px}
+.success-box p{font-size:13px;color:var(--t2);line-height:1.65}
+.success-box p strong{color:var(--gn)}
+.share-row{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.share-btn{background:var(--s2);border:1px solid var(--bd);color:var(--t1);border-radius:9px;
+  padding:9px 16px;font-size:12px;font-weight:700;font-family:var(--fd);cursor:pointer;transition:all .15s}
+.share-btn:hover{border-color:rgba(255,255,255,.15)}
+
+/* ═══════════════════════════════════
+   DEVICE FRAMES
+   ═══════════════════════════════════ */
+.devices{position:relative;animation:fadeUp .6s .15s both}
+/* LAPTOP FRAME */
+.laptop-wrap{position:relative;z-index:2;width:100%}
+
+.laptop-lid{
+  background:linear-gradient(160deg,#2e2e2e 0%,#1c1c1c 100%);
+  border-radius:16px 16px 0 0;padding:12px 12px 0;
+  box-shadow:0 0 0 1px rgba(255,255,255,.09),0 32px 90px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.06)}
+.laptop-cam{width:7px;height:7px;border-radius:50%;background:#1a1a1a;border:1px solid #333;
+  margin:0 auto 8px;display:block}
+.laptop-screen-frame{background:#000;border-radius:6px;overflow:hidden;
+  border:1px solid #1a1a1a;aspect-ratio:16/10;position:relative}
+.laptop-base{background:linear-gradient(180deg,#252525 0%,#1e1e1e 100%);
+  height:20px;border-radius:0 0 5px 5px;
+  box-shadow:0 10px 40px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.05)}
+.laptop-base::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:70px;height:5px;background:#1a1a1a;border-radius:0 0 4px 4px}
+
+/* PHONE FRAME */
+.phone-wrap{position:absolute;bottom:-28px;right:-32px;z-index:3;width:30%;min-width:150px;max-width:210px}
+.phone-shell{
+  background:linear-gradient(160deg,#2e2e2e 0%,#1c1c1c 100%);
+  border-radius:36px;padding:9px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.1),0 28px 70px rgba(0,0,0,.95),
+             0 0 0 10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+.phone-screen-frame{background:#000;border-radius:26px;overflow:hidden;
+  aspect-ratio:9/19.5;position:relative;border:1px solid #111;
+  display:flex;align-items:stretch}
+.phone-notch-bar{position:absolute;top:9px;left:50%;transform:translateX(-50%);
+  width:62px;height:5px;background:#1a1a1a;border-radius:3px;z-index:20}
+/* side buttons */
+.phone-shell::before{content:'';position:absolute;right:-3px;top:80px;width:3px;height:34px;
+  background:#252525;border-radius:0 3px 3px 0}
+.phone-shell::after{content:'';position:absolute;left:-3px;top:70px;width:3px;height:26px;
+  background:#252525;border-radius:3px 0 0 3px;box-shadow:0 36px 0 #252525}
+
+/* ═══════════════════════════════════
+   SCROLL CAROUSEL
+   ═══════════════════════════════════ */
+.laptop-screen-frame{overflow:hidden;position:relative}
+.phone-screen-frame{overflow:hidden;position:relative}
+
+/* Laptop — vertical */
+#lt{
+  display:flex;flex-direction:column;
+  width:100%;
+  will-change:transform;
+  transition:transform 1.1s cubic-bezier(0.76,0,0.24,1)
+}
+#lt .screen-h{
+  flex:0 0 100%;
+  width:100%;
+  min-height:0;
+}
+
+/* Phone — horizontal */
+#pt{
+  display:flex;
+  flex-direction:row;
+  height:100%;
+  width:100%;
+  will-change:transform;
+  transition:transform 0.95s cubic-bezier(0.76,0,0.24,1)
+}
+#pt .screen-h{
+  flex:0 0 100%;
+  width:100%;
+  height:100%;
+  min-width:100%;
+  overflow:hidden;
+  position:relative;
+}
+
+.screen-h{flex-shrink:0;width:100%}
+/* phone title clash fix */
+.pt2{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#f1f5f9;letter-spacing:-.5px}
+
+/* ═══════════════════════════════════
+   LAPTOP SCREENS — high fidelity
+   ═══════════════════════════════════ */
+
+/* shared layout */
+.ls{width:100%;height:100%;background:#000;display:flex;font-size:0;position:relative}
+
+/* sidebar */
+.sb{width:56px;background:#0d0d0d;border-right:1px solid #1e1e1e;
+  display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px;flex-shrink:0}
+.sb-logo{width:32px;height:32px;border-radius:9px;background:rgba(34,211,238,.12);
+  border:1px solid rgba(34,211,238,.2);display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:10px;font-weight:800;color:#22D3EE;margin-bottom:8px}
+.sbi{width:34px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sbi.on{background:rgba(34,211,238,.1)}
+.sbi svg{width:14px;height:14px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sbi svg{stroke:#2a2a2a}
+.sbi.on svg{stroke:#22D3EE}
+
+/* main pane */
+.lm{flex:1;padding:10px;overflow:hidden;display:flex;flex-direction:column;gap:5px}
+
+/* top bar */
+.ltop{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;margin-bottom:2px}
+.ltop-l .g{font-size:5px;color:#374151;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1.5px}
+.ltop-l .n{font-family:'Syne',sans-serif;font-size:8.5px;font-weight:700;color:#f1f5f9;margin-top:1px}
+.ltop-r{display:flex;gap:3px}
+.icb{width:17px;height:17px;border-radius:50%;background:#111;border:1px solid #1e1e1e;
+  display:flex;align-items:center;justify-content:center}
+.icb svg{width:8px;height:8px;stroke:#374151;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* stat row */
+.srow{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;flex-shrink:0}
+.sc{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:8px;padding:5px 7px}
+.sc-l{font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.sc-v{font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:-.5px}
+.sc-d{font-size:4px;color:#334155;margin-top:1.5px}
+.up{color:#10B981}.dn{color:#EF4444}
+
+/* section header */
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-shrink:0}
+.sh-t{font-family:'Syne',sans-serif;font-size:5.5px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:1.5px}
+.sh-a{font-family:'JetBrains Mono',monospace;font-size:5px;color:#22D3EE}
+
+/* invoice rows */
+.irow{display:flex;align-items:center;gap:4px;padding:4px 5px;
+  background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;margin-bottom:2px}
+.iav{width:20px;height:20px;border-radius:6px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:5px;font-weight:700}
+.ibody{flex:1;min-width:0}
+.iname{font-size:5.5px;font-weight:600;color:#f1f5f9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.imeta{font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;margin-top:1px}
+.iamt{font-family:'JetBrains Mono',monospace;font-size:6px;font-weight:600;flex-shrink:0}
+.ibadge{font-size:3.5px;font-weight:700;font-family:'Syne',sans-serif;
+  padding:1.5px 4px;border-radius:10px;flex-shrink:0;letter-spacing:.4px}
+
+/* mini chart bars */
+.chart-area{flex:1;display:flex;align-items:flex-end;gap:3px;padding:4px 0 0}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.bar{width:100%;border-radius:3px 3px 0 0;transition:height .3s ease}
+.bar-l{font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155}
+.chart-bg{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:8px;padding:8px;
+  display:flex;flex-direction:column;flex:1;overflow:hidden}
+
+/* expense rows */
+.erow{display:flex;align-items:center;gap:4px;padding:3px 5px;
+  background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;margin-bottom:2px}
+.eico{width:18px;height:18px;border-radius:5px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center}
+.eico svg{width:9px;height:9px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ebody{flex:1}
+.ename{font-size:5.5px;font-weight:600;color:#f1f5f9}
+.ecat{font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;margin-top:1px}
+.eamt{font-family:'JetBrains Mono',monospace;font-size:6px;font-weight:600;flex-shrink:0}
+
+/* client cards */
+.client-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px}
+.ccard{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:8px;padding:6px}
+.cav-row{display:flex;align-items:center;gap:4px;margin-bottom:4px}
+.cav{width:22px;height:22px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:6px;font-weight:700}
+.cn{font-size:5.5px;font-weight:600;color:#f1f5f9}
+.cr{font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;margin-top:1px}
+.cstats{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.cs{background:#111;border-radius:5px;padding:3px 4px}
+.cs-l{font-size:3.5px;color:#334155;text-transform:uppercase;letter-spacing:.5px}
+.cs-v{font-family:'JetBrains Mono',monospace;font-size:5.5px;font-weight:600;color:#f1f5f9;margin-top:1.5px}
+
+/* recon screen */
+.recon-pulse{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;
+  padding:12px;display:flex;flex-direction:column;align-items:center;text-align:center;
+  margin-bottom:5px;flex-shrink:0}
+.rp-circle{width:36px;height:36px;border-radius:50%;background:rgba(34,211,238,.1);
+  border:1px solid rgba(34,211,238,.2);display:flex;align-items:center;justify-content:center;
+  margin-bottom:6px;position:relative}
+.rp-circle svg{width:18px;height:18px;stroke:#22D3EE;fill:none;stroke-width:2;stroke-linecap:round;animation:spin 4s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.rp-t{font-family:'Syne',sans-serif;font-size:6.5px;font-weight:700;color:#f1f5f9;margin-bottom:2px}
+.rp-sub{font-size:4.5px;color:#334155;max-width:100px;line-height:1.5;margin-bottom:6px}
+.rp-stats{display:flex;gap:5px}
+.rps{background:#111;border-radius:6px;padding:4px 7px}
+.rps-l{font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155;text-transform:uppercase;letter-spacing:.5px}
+.rps-v{font-family:'JetBrains Mono',monospace;font-size:7px;font-weight:600;color:#f1f5f9;margin-top:1px}
+.rrow{display:flex;align-items:center;gap:4px;padding:4px 5px;
+  background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;margin-bottom:2px;opacity:.6}
+.rrow-ico{width:18px;height:18px;border-radius:5px;background:#111;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rrow-ico svg{width:9px;height:9px;stroke:#334155;fill:none;stroke-width:2;stroke-linecap:round}
+.rrow-body{flex:1}
+.rrow-d1{height:5px;background:#1a1a1a;border-radius:2px;width:60%;margin-bottom:2px}
+.rrow-d2{height:3.5px;background:#111;border-radius:2px;width:40%}
+.rrow-r{text-align:right}
+.rrow-a{height:5px;background:#1a1a1a;border-radius:2px;width:30px;margin-bottom:2px;margin-left:auto}
+.rrow-b{height:3.5px;background:#111;border-radius:2px;width:20px;margin-left:auto}
+
+/* ═══════════════════════════════════
+   PHONE SCREENS — high fidelity
+   ═══════════════════════════════════ */
+.ps{width:100%;height:100%;background:#000;padding:18px 8px 8px;
+  display:flex;flex-direction:column;gap:5px;font-size:0;
+  overflow:hidden;box-sizing:border-box;flex-shrink:0}
+.pnotch-space{height:8px;flex-shrink:0}
+.phdr{display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.phdr-l .pt{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#f1f5f9;letter-spacing:-.5px}
+.phdr-l .ps2{font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#374151;text-transform:uppercase;letter-spacing:1.5px;margin-top:1px}
+.phdr-r{display:flex;gap:4px}
+.picb{width:22px;height:22px;border-radius:50%;background:#0d0d0d;border:1px solid #1e1e1e;
+  display:flex;align-items:center;justify-content:center}
+.picb svg{width:10px;height:10px;stroke:#374151;fill:none;stroke-width:2;stroke-linecap:round}
+.picb.pri{background:#22D3EE;border-color:#22D3EE}
+.picb.pri svg{stroke:#000}
+
+/* phone chips */
+.pchips{display:flex;gap:3px;flex-shrink:0}
+.pchip{font-family:'JetBrains Mono',monospace;font-size:5.5px;font-weight:600;
+  padding:3px 7px;border-radius:10px;border:1px solid #1e1e1e;background:#0d0d0d;color:#334155;white-space:nowrap}
+.pchip.a{background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.2);color:#22D3EE}
+
+/* phone invoice cards */
+.pinv{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:11px;
+  padding:7px 8px;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.pinv-av{width:26px;height:26px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:7px;font-weight:700}
+.pinv-body{flex:1;min-width:0}
+.pinv-name{font-size:8px;font-weight:600;color:#f1f5f9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pinv-meta{font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#334155;margin-top:1.5px}
+.pinv-r{text-align:right;flex-shrink:0}
+.pinv-amt{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600}
+.pinv-badge{font-size:4.5px;font-weight:700;padding:2px 5px;border-radius:8px;
+  margin-top:2px;display:inline-block;letter-spacing:.3px}
+
+/* phone stat hero card */
+.pstat-hero{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:12px;
+  padding:12px;flex-shrink:0;position:relative;overflow:hidden}
+.pstat-hero::before{content:'';position:absolute;top:-20px;right:-20px;width:70px;height:70px;
+  border-radius:50%;background:rgba(34,211,238,.08);pointer-events:none}
+.psh-l{font-family:'JetBrains Mono',monospace;font-size:5px;color:#334155;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.psh-v{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;color:#f1f5f9;letter-spacing:-1px;margin-bottom:6px}
+.psh-tags{display:flex;gap:4px}
+.psh-tag{font-size:5px;font-weight:700;padding:2px 6px;border-radius:8px}
+
+/* phone 4-stat grid */
+.p4g{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;flex-shrink:0}
+.p4c{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:7px;position:relative;overflow:hidden}
+.p4c::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;border-radius:0 0 10px 10px}
+.p4c-l{font-family:'JetBrains Mono',monospace;font-size:5px;color:#334155;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.p4c-v{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
+
+/* phone bottom nav */
+.pnav{background:rgba(0,0,0,.95);border-top:1px solid #1a1a1a;
+  padding:5px 0 10px;display:flex;justify-content:space-around;flex-shrink:0;
+  margin-top:auto;width:100%}
+.pni{display:flex;flex-direction:column;align-items:center;gap:2px}
+.pni svg{width:13px;height:13px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pni svg{stroke:#334155}
+.pni.a svg{stroke:#22D3EE}
+.pni-l{font-size:5px;color:#334155;font-family:'Instrument Sans',sans-serif;font-weight:600}
+.pni.a .pni-l{color:#22D3EE}
+
+/* phone FAB */
+.pfab{position:absolute;bottom:50px;right:10px;width:26px;height:26px;border-radius:50%;
+  background:#22D3EE;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(34,211,238,.45)}
+.pfab svg{width:13px;height:13px;stroke:#000;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+/* phone expense cards */
+.pexp{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:11px;
+  padding:7px 8px;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.pexp-ico{width:26px;height:26px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center}
+.pexp-ico svg{width:12px;height:12px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pexp-body{flex:1}
+.pexp-n{font-size:8px;font-weight:600;color:#f1f5f9}
+.pexp-c{font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#334155;margin-top:1.5px}
+.pexp-a{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;flex-shrink:0}
+
+/* ═══════════════════════════════════
+   REST OF PAGE
+   ═══════════════════════════════════ */
+.stats-strip{border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);margin-top:80px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+@media(max-width:640px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-item{padding:28px 20px;text-align:center;border-right:1px solid var(--bd)}
+.stat-item:last-child{border-right:none}
+.stat-val{font-family:var(--fm);font-size:28px;font-weight:600;letter-spacing:-1px;margin-bottom:4px}
+.stat-lbl{font-size:11px;color:var(--t3);font-weight:700;font-family:var(--fd);text-transform:uppercase;letter-spacing:1.5px}
+@media(max-width:640px){
+  .stat-item{border-bottom:1px solid var(--bd)}
+  .stat-item:nth-child(2n){border-right:none}
+  .stat-item:nth-last-child(-n+2){border-bottom:none}
+}
+
+.sec-ey{font-family:var(--fm);font-size:9px;color:var(--cy);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:14px}
+.sec-h{font-family:var(--fd);font-size:clamp(28px,4.5vw,50px);font-weight:800;line-height:1.08;letter-spacing:-1.5px;color:var(--t1);margin-bottom:16px}
+.sec-sub{font-size:16px;color:var(--t2);line-height:1.68;max-width:540px}
+
+section{padding:96px 0}
+section.alt{border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+
+/* who pills */
+.who-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:32px}
+.wpill{display:flex;align-items:center;gap:7px;background:var(--s1);border:1px solid var(--bd);
+  border-radius:30px;padding:8px 16px;font-size:12px;font-weight:500;color:var(--t2);transition:all .18s}
+.wpill:hover{border-color:rgba(255,255,255,.12);color:var(--t1)}
+.wd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* pain / feat cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:48px}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:24px;transition:all .22s}
+.card:hover{border-color:rgba(255,255,255,.1);transform:translateY(-3px)}
+.card-em{font-size:24px;margin-bottom:12px;display:block}
+.card-t{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--t1);margin-bottom:7px}
+.card-d{font-size:13px;color:var(--t2);line-height:1.65}
+.feat-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.feat-ico svg{width:19px;height:19px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f-cy .feat-ico{background:var(--cy-dim)}.f-cy .feat-ico svg{stroke:var(--cy)}
+.f-gn .feat-ico{background:var(--gd)}.f-gn .feat-ico svg{stroke:var(--gn)}
+.f-rd .feat-ico{background:var(--rdd)}.f-rd .feat-ico svg{stroke:var(--rd)}
+.f-am .feat-ico{background:var(--amd)}.f-am .feat-ico svg{stroke:var(--am)}
+.f-vi .feat-ico{background:var(--vid)}.f-vi .feat-ico svg{stroke:var(--vi)}
+.f-pk .feat-ico{background:rgba(168,85,247,.1)}.f-pk .feat-ico svg{stroke:#A855F7}
+
+/* freemium box */
+.fm-box{background:var(--s1);border:1px solid rgba(16,185,129,.25);border-radius:24px;
+  overflow:hidden;position:relative;box-shadow:0 0 80px rgba(16,185,129,.06)}
+.fm-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gn),var(--cy),transparent)}
+.fm-top{padding:52px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+@media(max-width:820px){.fm-top{grid-template-columns:1fr;gap:32px;padding:32px 28px}}
+.fm-eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--gd);
+  border:1px solid var(--gb);border-radius:20px;padding:5px 13px;margin-bottom:20px;
+  font-family:var(--fm);font-size:9px;color:var(--gn);letter-spacing:1px}
+.fm-h{font-family:var(--fd);font-size:clamp(28px,3.8vw,44px);font-weight:800;
+  line-height:1.08;letter-spacing:-1.5px;color:var(--t1);margin-bottom:14px}
+.fm-h em{font-style:normal;color:var(--gn)}
+.fm-p{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:14px}
+.fm-p strong{color:var(--t1)}
+.fm-card{background:var(--s2);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+.fm-card-top{background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(16,185,129,.04));
+  padding:20px 22px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between}
+.fm-tier{font-family:var(--fm);font-size:9px;letter-spacing:2px;color:var(--gn);text-transform:uppercase;font-weight:700}
+.fm-price{font-family:var(--fm);font-size:32px;font-weight:700;color:var(--gn);letter-spacing:-1.5px}
+.fm-price span{font-size:13px;color:var(--t2);margin-left:4px}
+.fm-items{padding:18px 22px;display:flex;flex-direction:column;gap:10px}
+.fm-item{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--t2);line-height:1.45}
+.fm-chk{width:18px;height:18px;border-radius:5px;background:var(--gd);border:1px solid var(--gb);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fm-chk svg{width:9px;height:9px;stroke:var(--gn);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.fm-foot{padding:14px 22px;background:rgba(16,185,129,.05);border-top:1px solid var(--bd);
+  font-size:11px;color:var(--t3);display:flex;align-items:center;gap:6px}
+.fm-foot svg{width:12px;height:12px;stroke:var(--gn);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.fm-bottom{background:rgba(16,185,129,.06);border-top:1px solid rgba(16,185,129,.12);
+  padding:26px 52px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media(max-width:820px){.fm-bottom{padding:22px 28px}}
+.fm-promise{font-size:14px;color:var(--t2);display:flex;align-items:center;gap:9px}
+.fm-promise strong{color:var(--t1)}
+.fm-join{background:var(--gn);color:#000;border:none;border-radius:12px;padding:13px 28px;
+  font-size:14px;font-weight:700;font-family:var(--fd);cursor:pointer;transition:all .2s;
+  white-space:nowrap;box-shadow:0 6px 22px rgba(16,185,129,.35)}
+.fm-join:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(16,185,129,.5)}
+
+/* testimonials carousel */
+.testi-carousel{position:relative;overflow:hidden;margin-bottom:32px}
+.testi-track{display:flex;transition:transform .55s cubic-bezier(0.76,0,0.24,1)}
+.testi-slide{flex:0 0 100%;min-width:100%}
+.tcarousel-dots{display:flex;justify-content:center;gap:7px;margin-top:18px}
+.tcarousel-dot{width:7px;height:7px;border-radius:50%;background:var(--bd);border:none;cursor:pointer;padding:0;transition:all .2s}
+.tcarousel-dot.on{width:22px;border-radius:4px;background:var(--cy)}
+.tcarousel-nav{display:flex;justify-content:flex-end;gap:8px;margin-bottom:16px}
+.tnav-btn{width:34px;height:34px;border-radius:50%;background:var(--s2);border:1px solid var(--bd);
+  color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.tnav-btn:hover{border-color:var(--cy);color:var(--cy)}
+.tnav-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+/* hero feature chips */
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 24px}
+.hero-chip{display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--bd);
+  border-radius:20px;padding:6px 13px;font-size:12px;font-weight:600;color:var(--t2)}
+.hero-chip svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;flex-shrink:0}
+.hero-chip.cy{color:var(--cy);background:var(--cy-dim);border-color:var(--cy-b)}
+.hero-chip.gn{color:var(--gn);background:var(--gd);border-color:var(--gb)}
+.hero-chip.am{color:var(--am);background:var(--amd)}
+.hero-chip.rd{color:var(--rd);background:var(--rdd)}
+.hero-chip.vi{color:var(--vi);background:var(--vid)}
+  padding:44px 48px;margin-bottom:14px;position:relative;overflow:hidden}
+@media(max-width:768px){.testi-big{padding:28px 24px}}
+.testi-big::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--cy),transparent)}
+.tbq{font-family:var(--fd);font-size:clamp(15px,2.2vw,21px);font-weight:600;
+  color:var(--t1);line-height:1.55;margin-bottom:24px;letter-spacing:-.3px;position:relative}
+.tbq::before{content:'\201C';position:absolute;top:-12px;left:-4px;font-size:60px;
+  color:rgba(34,211,238,.09);font-family:var(--fd);line-height:1}
+.testi-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tav{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:14px;font-weight:800;flex-shrink:0}
+.t-name{font-size:14px;font-weight:700;color:var(--t1);font-family:var(--fd)}
+.t-role{font-size:11px;color:var(--t3);margin-top:2px}
+.tstars{display:flex;gap:2px;margin-bottom:14px}
+.tstars span{color:var(--am);font-size:14px}
+.t-tag{margin-left:auto;background:var(--cy-dim);border:1px solid var(--cy-b);
+  border-radius:7px;padding:4px 10px;font-family:var(--fm);font-size:9px;color:var(--cy);letter-spacing:.5px}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:14px}
+.tcard{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:22px;transition:all .22s}
+.tcard:hover{border-color:rgba(255,255,255,.1);transform:translateY(-3px)}
+.tcard-stars{display:flex;gap:2px;margin-bottom:12px}
+.tcard-stars span{color:var(--am);font-size:12px}
+.tcard-q{font-size:14px;color:var(--t1);line-height:1.72;margin-bottom:18px;font-style:italic;opacity:.9}
+.tcard-q::before{content:'\201C';color:var(--cy);font-style:normal;margin-right:1px}
+.tcard-q::after{content:'\201D';color:var(--cy);font-style:normal;margin-left:1px}
+.tcard-auth{display:flex;align-items:center;gap:9px}
+.ta{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-family:var(--fd);font-size:11px;font-weight:800;flex-shrink:0}
+.ta-n{font-size:12px;font-weight:700;color:var(--t1)}
+.ta-r{font-size:10px;color:var(--t3);margin-top:1px}
+
+/* ticker */
+.ticker{overflow:hidden;position:relative}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+.ticker::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.ticker::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+.ticker-track{display:flex;gap:12px;width:max-content;animation:scroll 34s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tkt{background:var(--s1);border:1px solid var(--bd);border-radius:14px;
+  padding:16px 20px;min-width:268px;max-width:300px;flex-shrink:0}
+.tkt-q{font-size:12px;color:var(--t2);line-height:1.62;margin-bottom:12px;font-style:italic}
+.tkt-q::before{content:'\201C';color:var(--cy);margin-right:2px}
+.tkt-q::after{content:'\201D';color:var(--cy);margin-left:2px}
+.tkt-auth{display:flex;align-items:center;gap:7px}
+.tkt-av{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-family:var(--fd);font-size:8px;font-weight:800;flex-shrink:0}
+.tkt-n{font-size:11px;font-weight:700;color:var(--t1)}
+.tkt-r{font-size:9px;color:var(--t3)}
+
+/* how */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0}
+.how-step{text-align:center;padding:0 18px}
+.how-n{width:52px;height:52px;border-radius:14px;background:var(--s1);border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-family:var(--fm);
+  font-size:18px;font-weight:600;color:var(--cy);margin:0 auto 16px;transition:all .22s}
+.how-step:hover .how-n{background:var(--cy-dim);border-color:var(--cy-b)}
+.how-t{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.how-d{font-size:12px;color:var(--t2);line-height:1.6}
+
+/* sars */
+.sars-box{background:var(--s1);border:1px solid rgba(34,211,238,.18);
+  border-radius:22px;padding:48px;text-align:center;position:relative;overflow:hidden}
+@media(max-width:768px){.sars-box{padding:28px 20px}}
+.sars-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cy),var(--gn),transparent)}
+.sars-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:26px}
+.spill{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:30px;
+  font-size:12px;font-weight:600;background:var(--s2);border:1px solid var(--bd);color:var(--t1);transition:all .18s}
+.spill:hover{border-color:rgba(255,255,255,.12)}
+
+/* faq */
+.faq-list{display:flex;flex-direction:column;gap:8px;max-width:700px;margin:0 auto}
+.faq-item{background:var(--s1);border:1px solid var(--bd);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.faq-item:hover{border-color:rgba(255,255,255,.1)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;gap:16px}
+.faq-qt{font-size:14px;font-weight:600;color:var(--t1);font-family:var(--fd)}
+.faq-ic{color:var(--cy);font-size:18px;flex-shrink:0}
+.faq-a{display:none;padding:0 20px 16px;font-size:13px;color:var(--t2);line-height:1.7}
+
+/* final form */
+.final-form-box{background:var(--s1);border:1px solid var(--bd);border-radius:20px;
+  padding:32px;max-width:500px;margin:0 auto;position:relative;overflow:hidden}
+.final-form-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cy),var(--gn))}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.fg label{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--t3);display:block;margin-bottom:5px}
+.fi2{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:10px;
+  padding:12px 14px;font-size:13px;color:var(--t1);font-family:var(--fb);outline:none;transition:border-color .18s;-webkit-appearance:none}
+.fi2:focus{border-color:var(--cy)}
+.fi2::placeholder{color:var(--t3)}
+select.fi2{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+select.fi2 option{background:var(--s2)}
+.submit-btn{width:100%;padding:14px;margin-top:10px;background:var(--cy);color:#000;border:none;
+  border-radius:11px;font-size:14px;font-weight:700;font-family:var(--fd);cursor:pointer;
+  transition:all .2s;box-shadow:0 6px 22px rgba(34,211,238,.3)}
+.submit-btn:hover{background:#38BDF8;transform:translateY(-2px);box-shadow:0 12px 32px rgba(34,211,238,.45)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.form-legal{font-size:11px;color:var(--t3);text-align:center;margin-top:10px;line-height:1.5}
+.counter-strip{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:20px}
+.c-dot{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:pdot 2s infinite;flex-shrink:0}
+.c-txt{font-size:13px;color:var(--t2)}
+.c-num{font-family:var(--fm);font-size:14px;font-weight:600;color:var(--gn)}
+
+/* footer */
+footer{border-top:1px solid var(--bd);padding:40px 0}
+.foot-in{max-width:1200px;margin:0 auto;padding:0 32px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.foot-logo{font-family:var(--fd);font-size:17px;font-weight:800;color:var(--t3)}
+.foot-logo span{color:var(--cy)}
+.foot-links{display:flex;gap:22px;flex-wrap:wrap;justify-content:center}
+.foot-links a{font-size:12px;color:var(--t3);text-decoration:none;transition:color .15s}
+.foot-links a:hover{color:var(--t2)}
+.foot-note{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.5px}
+
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.cta-ghost{background:transparent;border:1px solid var(--bd);border-radius:11px;
+  padding:13px 24px;font-family:var(--fd);font-size:14px;font-weight:700;
+  color:var(--t2);cursor:pointer;transition:all .18s;letter-spacing:.2px}
+.cta-ghost:hover{border-color:var(--cy);color:var(--cy)}
+/* mini testimonial carousel below hero */
+.mini-testi{margin-top:40px;position:relative;overflow:hidden}
+.mini-testi-track{display:flex;transition:transform .6s cubic-bezier(0.76,0,0.24,1)}
+.mini-testi-slide{flex:0 0 100%;min-width:100%;display:flex;align-items:flex-start;gap:18px;
+  background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:22px 26px;
+  position:relative;overflow:hidden}
+.mini-testi-slide::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--cy),transparent)}
+.mt-av{width:40px;height:40px;border-radius:11px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:13px;font-weight:800}
+.mt-body{flex:1;min-width:0}
+.mt-stars{display:flex;gap:2px;margin-bottom:8px}
+.mt-stars span{color:var(--am);font-size:11px}
+.mt-q{font-size:14px;color:var(--t1);line-height:1.65;font-style:italic;margin-bottom:12px;opacity:.92}
+.mt-q::before{content:'\201C';color:var(--cy);font-style:normal;margin-right:2px}
+.mt-q::after{content:'\201D';color:var(--cy);font-style:normal;margin-left:2px}
+.mt-who{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.mt-name{font-size:12px;font-weight:700;color:var(--t1);font-family:var(--fd)}
+.mt-role{font-size:11px;color:var(--t3);margin-top:1px}
+.mt-tag{font-family:var(--fm);font-size:8px;letter-spacing:.5px;color:var(--cy);
+  background:var(--cy-dim);border:1px solid var(--cy-b);border-radius:6px;padding:3px 9px}
+.mini-testi-dots{display:flex;justify-content:center;gap:6px;margin-top:14px}
+.mt-dot{width:6px;height:6px;border-radius:50%;background:var(--bd);border:none;padding:0;cursor:pointer;transition:all .2s}
+.mt-dot.on{width:18px;border-radius:3px;background:var(--cy)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fi2{margin-bottom:0}
+.fade{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.fade.vis{opacity:1;transform:translateY(0)}
+@media(max-width:640px){.nav-pill{display:none}}
+
+/* ═══════════════════════════════════
+   RESPONSIVE — full breakpoint system
+   ═══════════════════════════════════ */
+
+/* ── TABLET ≤ 960px ── */
+@media(max-width:960px){
+  .wrap,.wrap-sm{padding:0 24px}
+  .nav-in{padding:0 24px}
+  .hero{padding:110px 0 48px}
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-sub{max-width:100%}
+  .devices{width:100%;max-width:580px;margin:0 auto}
+  .mini-testi-slide{flex-direction:column;gap:10px}
+  .mini-testi-slide .mt-av{display:none}
+  .stats-strip{margin-top:52px}
+  section{padding:72px 0}
+  .how-grid{grid-template-columns:repeat(2,1fr)}
+  .tgrid{grid-template-columns:1fr}
+}
+
+/* ── MOBILE ≤ 640px ── */
+@media(max-width:640px){
+  .wrap,.wrap-sm{padding:0 16px}
+  .nav-in{padding:0 16px;height:56px}
+  .logo{font-size:18px}
+  .nav-cta{padding:8px 16px;font-size:12px}
+
+  /* hero */
+  .hero{padding:84px 0 28px}
+  h1.hero-h{font-size:clamp(32px,9vw,52px);letter-spacing:-1px}
+  .hero-sub{font-size:15px;line-height:1.62}
+  .hero-chips{gap:6px}
+  .hero-chip{font-size:11px;padding:5px 10px}
+  .free-badge{padding:14px;gap:10px;flex-wrap:wrap}
+  .fb-ttl{font-size:13px}
+  .fb-sub{font-size:12px}
+  .hero-ctas{flex-direction:column;gap:10px}
+  .cta-btn,.cta-ghost{width:100%;text-align:center;justify-content:center;padding:14px 20px}
+
+  /* devices — keep phone overlapping laptop, just scale down */
+  .devices{max-width:100%}
+
+  /* mini testimonial */
+  .mini-testi{margin-top:24px}
+  .mini-testi-slide{padding:16px 16px;flex-direction:column;gap:8px}
+  .mt-av{width:32px;height:32px;font-size:11px;border-radius:9px}
+  .mt-q{font-size:13px}
+  .mt-name{font-size:11px}
+  .mt-role{font-size:10px}
+
+  /* stats strip */
+  .stats-strip{margin-top:32px}
+  .stat-val{font-size:22px}
+  .stat-lbl{font-size:10px;letter-spacing:1px}
+
+  /* sections */
+  section{padding:52px 0}
+  .sec-h{letter-spacing:-.8px}
+  .sec-sub{font-size:14px;line-height:1.62}
+  .sec-ey{font-size:8px}
+
+  /* who pills */
+  .wpill{font-size:11px;padding:6px 12px}
+
+  /* pain / feat cards */
+  .card-grid{grid-template-columns:1fr;gap:9px;margin-top:28px}
+  .card{padding:18px 16px}
+  .card-em{font-size:22px;margin-bottom:9px}
+  .card-t{font-size:14px}
+  .card-d{font-size:12.5px}
+
+  /* how steps */
+  .how-grid{grid-template-columns:1fr;gap:18px}
+  .how-n{font-size:28px}
+  .how-t{font-size:15px}
+  .how-d{font-size:13px}
+
+  /* freemium */
+  .fm-top{padding:22px 18px;gap:22px}
+  .fm-h{font-size:clamp(22px,6vw,32px)}
+  .fm-p{font-size:13.5px}
+  .fm-items{padding:14px 18px;gap:8px}
+  .fm-item{font-size:12.5px}
+  .fm-bottom{padding:18px 18px;flex-direction:column;gap:14px}
+  .fm-join{width:100%;text-align:center;padding:13px 20px}
+  .fm-promise{font-size:13px}
+
+  /* testimonials carousel */
+  .testi-big{padding:20px 16px}
+  .tbq{font-size:clamp(13px,3.5vw,16px)}
+  .tav{width:36px;height:36px;font-size:12px;border-radius:10px}
+  .t-name{font-size:13px}
+  .tcarousel-nav{margin-bottom:8px}
+  .tnav-btn{width:30px;height:30px}
+
+  /* ticker */
+  .tkt{min-width:210px;max-width:250px;padding:12px 14px}
+  .tkt-q{font-size:11px}
+
+  /* sars box */
+  .sars-box{padding:22px 18px}
+  .sars-grid{grid-template-columns:1fr}
+
+  /* faq */
+  .faq-qt{font-size:13.5px;line-height:1.4}
+  .faq-a{font-size:13px}
+  .faq-item{padding:14px 16px}
+
+  /* final form */
+  .final-form-box{padding:20px 16px;border-radius:16px}
+  .fg2{grid-template-columns:1fr}
+  .submit-btn{font-size:13px;padding:14px 18px}
+  .form-legal{font-size:10px}
+
+  /* footer */
+  .foot-links{flex-direction:column;align-items:center;gap:8px}
+  .foot-note{text-align:center}
+}
+
+/* ── SMALL MOBILE ≤ 400px ── */
+@media(max-width:400px){
+  h1.hero-h{font-size:clamp(28px,8.5vw,38px)}
+  .hero-chip{font-size:10px;padding:4px 9px;gap:5px}
+  .sec-h{font-size:clamp(22px,7vw,30px)}
+  .mini-testi-slide{padding:13px 14px}
+  .mt-q{font-size:12px}
+  .card{padding:15px 14px}
+}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="#">Zande<div class="logo-dot"></div></a>
+    <div class="nav-r">
+      <span class="nav-pill">Free beta testing access</span>
+      <button class="nav-cta" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Create Free Account</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+
+      <!-- LEFT COPY -->
+      <div>
+        <div class="eyebrow"><div class="pulse-dot"></div>Built for SA Businesses · Exclusive beta · No payment required</div>
+        <h1 class="hero-h">Your business books,<br>done for you —<br><span class="grad">automatically.</span></h1>
+        <p class="hero-sub">Zande handles every invoice, expense, bank transaction and tax calculation for your business — automatically. <strong>No spreadsheets. No missing receipts. No accountant required.</strong> Every financial record kept, organised and SARS-ready.</p>
+
+        <!-- What we do chips -->
+        <div class="hero-chips">
+          <div class="hero-chip cy"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Tax invoices in 60 sec</div>
+          <div class="hero-chip gn"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>Bank reconciliation</div>
+          <div class="hero-chip am"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>Expense tracking</div>
+          <div class="hero-chip rd"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>VAT201 ready</div>
+          <div class="hero-chip vi"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Full financial records</div>
+          <div class="hero-chip"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>SARS audit trail</div>
+        </div>
+
+        <div class="free-badge">
+          <div class="fb-em">🏢</div>
+          <div>
+            <div class="fb-ttl">Zande is for Businesses. Built for Businesses.</div>
+            <div class="fb-sub">Every tool built around how SA businesses actually operate — not adapted from a foreign product.</div>
+          </div>
+        </div>
+        <div class="hero-ctas">
+          <button class="cta-btn" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Create Free Account →</button>
+          <button class="cta-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">See how it works</button>
+        </div>
+      </div>
+
+      <!-- RIGHT DEVICES -->
+      <div class="devices">
+
+        <!-- ══ LAPTOP ══ -->
+        <div class="laptop-wrap">
+          <div class="laptop-lid">
+            <div class="laptop-cam"></div>
+            <div class="laptop-screen-frame">
+              <!-- scroll track: 4 screens stacked, JS animates translateY -->
+              <div class="scroll-track" id="lt">
+
+                <!-- L-SCREEN 1: Dashboard + quick actions -->
+                <div class="ls screen-h">
+                  <div class="sb">
+                    <div class="sb-logo">Z</div>
+                    <div class="sbi on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                  </div>
+                  <div class="lm">
+                    <div class="ltop"><div class="ltop-l"><div class="g">Good morning</div><div class="n">Acme Trading (Pty) Ltd</div></div><div class="ltop-r"><div class="icb"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="icb"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div></div></div>
+                    <div class="srow">
+                      <div class="sc"><div class="sc-l">Outstanding</div><div class="sc-v" style="color:#22D3EE">R126,375</div><div class="sc-d">4 invoices</div></div>
+                      <div class="sc"><div class="sc-l">Collected MTD</div><div class="sc-v" style="color:#10B981">R40,250</div><div class="sc-d up">↑ 18%</div></div>
+                      <div class="sc"><div class="sc-l">Expenses MTD</div><div class="sc-v" style="color:#F59E0B">R45,593</div><div class="sc-d dn">↑ 12%</div></div>
+                      <div class="sc"><div class="sc-l">Overdue</div><div class="sc-v" style="color:#EF4444">R31,625</div><div class="sc-d">1 invoice</div></div>
+                    </div>
+                    <!-- Quick actions -->
+                    <div class="sh"><div class="sh-t">Quick Actions</div></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;flex-shrink:0">
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px;display:flex;align-items:center;gap:4px"><div style="width:16px;height:16px;border-radius:5px;background:rgba(34,211,238,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:8px;height:8px;stroke:#22D3EE;fill:none;stroke-width:2.5;stroke-linecap:round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><span style="font-size:5px;font-weight:600;color:#f1f5f9;font-family:'Syne',sans-serif">New Invoice</span></div>
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px;display:flex;align-items:center;gap:4px"><div style="width:16px;height:16px;border-radius:5px;background:rgba(245,158,11,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:8px;height:8px;stroke:#F59E0B;fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div><span style="font-size:5px;font-weight:600;color:#f1f5f9;font-family:'Syne',sans-serif">Add Expense</span></div>
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px;display:flex;align-items:center;gap:4px"><div style="width:16px;height:16px;border-radius:5px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:8px;height:8px;stroke:#10B981;fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><span style="font-size:5px;font-weight:600;color:#f1f5f9;font-family:'Syne',sans-serif">New Client</span></div>
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px;display:flex;align-items:center;gap:4px"><div style="width:16px;height:16px;border-radius:5px;background:rgba(99,102,241,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:8px;height:8px;stroke:#6366F1;fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0018 9h-1.26"/></svg></div><span style="font-size:5px;font-weight:600;color:#f1f5f9;font-family:'Syne',sans-serif">Import Bank</span></div>
+                    </div>
+                    <div class="sh"><div class="sh-t">Recent Invoices</div><div class="sh-a">View All</div></div>
+                    <div class="irow"><div class="iav" style="background:rgba(99,102,241,.15);color:#6366F1">PP</div><div class="ibody"><div class="iname">Polokwane Property Group</div><div class="imeta">INV-0004 · Due 04 Dec</div></div><div class="iamt" style="color:#f1f5f9">R60,000</div><div class="ibadge" style="background:rgba(99,102,241,.12);color:#6366F1">SENT</div></div>
+                    <div class="irow"><div class="iav" style="background:rgba(239,68,68,.12);color:#EF4444">CF</div><div class="ibody"><div class="iname">Cape Fresh Produce</div><div class="imeta">INV-0002 · 16 days overdue</div></div><div class="iamt" style="color:#EF4444">R31,625</div><div class="ibadge" style="background:rgba(239,68,68,.1);color:#EF4444">OVERDUE</div></div>
+                    <div class="irow"><div class="iav" style="background:rgba(16,185,129,.12);color:#10B981">KC</div><div class="ibody"><div class="iname">Khumalo Consulting</div><div class="imeta">INV-0001 · Paid 15 Oct</div></div><div class="iamt" style="color:#10B981">R40,250</div><div class="ibadge" style="background:rgba(16,185,129,.1);color:#10B981">PAID</div></div>
+                  </div>
+                </div>
+
+                <!-- L-SCREEN 2: Performance dashboard with charts -->
+                <div class="ls screen-h">
+                  <div class="sb">
+                    <div class="sb-logo">Z</div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+                    <div class="sbi on"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                  </div>
+                  <div class="lm">
+                    <div class="ltop"><div class="ltop-l"><div class="g">Performance</div><div class="n">Business Intelligence</div></div><div class="ltop-r"><div style="display:flex;gap:2px"><?xml version="1.0"?><svg viewBox="0 0 0 0"></svg></div></div></div>
+                    <!-- Big net figure -->
+                    <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:9px;padding:8px 9px;margin-bottom:4px;flex-shrink:0;position:relative;overflow:hidden">
+                      <div style="position:absolute;top:-10px;right:-10px;width:50px;height:50px;border-radius:50%;background:rgba(34,211,238,.06)"></div>
+                      <div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Business Net Amount</div>
+                      <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#f1f5f9;letter-spacing:-1px">R128,180</div>
+                      <div style="display:flex;align-items:center;gap:4px;margin-top:3px">
+                        <span style="background:rgba(16,185,129,.12);color:#10B981;font-family:'JetBrains Mono',monospace;font-size:4px;font-weight:700;padding:2px 5px;border-radius:6px">+24.3%</span>
+                        <span style="font-size:4px;color:#334155;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.5px">vs prev period</span>
+                      </div>
+                    </div>
+                    <!-- Revenue chart -->
+                    <div class="chart-bg" style="flex:0 0 auto;height:72px;margin-bottom:4px">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-shrink:0">
+                        <span style="font-family:'Syne',sans-serif;font-size:5px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:1px">Revenue Trends</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:4.5px;color:#22D3EE">R284,500 peak</span>
+                      </div>
+                      <!-- SVG line chart -->
+                      <svg viewBox="0 0 200 40" style="width:100%;height:36px;overflow:visible">
+                        <defs><linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22D3EE" stop-opacity=".15"/><stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/></linearGradient></defs>
+                        <path d="M0,30 L28,26 L55,28 L82,18 L110,12 L138,8 L165,5 L200,2" fill="none" stroke="#22D3EE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M0,30 L28,26 L55,28 L82,18 L110,12 L138,8 L165,5 L200,2 L200,40 L0,40 Z" fill="url(#lg1)"/>
+                        <!-- dots -->
+                        <circle cx="200" cy="2" r="2" fill="#22D3EE"/>
+                        <circle cx="110" cy="12" r="1.5" fill="#22D3EE" opacity=".6"/>
+                      </svg>
+                      <div style="display:flex;justify-content:space-between;margin-top:1px">
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155">Jun</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155">Jul</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155">Aug</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155">Sep</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155">Oct</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155">Nov</span>
+                      </div>
+                    </div>
+                    <!-- 3 KPI cards -->
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;flex-shrink:0;margin-bottom:4px">
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px"><div style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Revenue Growth</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;font-weight:600;color:#10B981">R284,500</div><div style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#10B981;margin-top:1px">+24.3%</div></div>
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px"><div style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Profit Margin</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;font-weight:600;color:#22D3EE">45.1%</div><div style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#22D3EE;margin-top:1px">+8.2 pts</div></div>
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px"><div style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Cash Flow</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;font-weight:600;color:#f1f5f9">R82,587</div><div style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#334155;margin-top:1px">Stable</div></div>
+                    </div>
+                    <!-- Bar chart: revenue vs expenses -->
+                    <div class="chart-bg" style="flex:1;min-height:0">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                        <span style="font-family:'Syne',sans-serif;font-size:5px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:1px">Revenue vs Expenses</span>
+                        <div style="display:flex;gap:5px;align-items:center">
+                          <span style="width:5px;height:5px;border-radius:1px;background:#10B981;display:inline-block"></span><span style="font-size:4px;color:#334155">Rev</span>
+                          <span style="width:5px;height:5px;border-radius:1px;background:#EF4444;display:inline-block"></span><span style="font-size:4px;color:#334155">Exp</span>
+                        </div>
+                      </div>
+                      <div style="display:flex;align-items:flex-end;gap:3px;height:38px">
+                        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px"><div style="display:flex;gap:1px;align-items:flex-end;height:32px"><div style="width:6px;background:#10B981;opacity:.7;border-radius:2px 2px 0 0;height:52%"></div><div style="width:6px;background:#EF4444;opacity:.7;border-radius:2px 2px 0 0;height:38%"></div></div><span style="font-size:3.5px;color:#334155;font-family:'JetBrains Mono',monospace">Jul</span></div>
+                        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px"><div style="display:flex;gap:1px;align-items:flex-end;height:32px"><div style="width:6px;background:#10B981;opacity:.8;border-radius:2px 2px 0 0;height:62%"></div><div style="width:6px;background:#EF4444;opacity:.8;border-radius:2px 2px 0 0;height:44%"></div></div><span style="font-size:3.5px;color:#334155;font-family:'JetBrains Mono',monospace">Aug</span></div>
+                        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px"><div style="display:flex;gap:1px;align-items:flex-end;height:32px"><div style="width:6px;background:#10B981;opacity:.85;border-radius:2px 2px 0 0;height:72%"></div><div style="width:6px;background:#EF4444;opacity:.85;border-radius:2px 2px 0 0;height:50%"></div></div><span style="font-size:3.5px;color:#334155;font-family:'JetBrains Mono',monospace">Sep</span></div>
+                        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px"><div style="display:flex;gap:1px;align-items:flex-end;height:32px"><div style="width:6px;background:#10B981;opacity:.9;border-radius:2px 2px 0 0;height:82%"></div><div style="width:6px;background:#EF4444;opacity:.9;border-radius:2px 2px 0 0;height:54%"></div></div><span style="font-size:3.5px;color:#334155;font-family:'JetBrains Mono',monospace">Oct</span></div>
+                        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px"><div style="display:flex;gap:1px;align-items:flex-end;height:32px"><div style="width:6px;background:#10B981;border-radius:2px 2px 0 0;height:95%"></div><div style="width:6px;background:#EF4444;border-radius:2px 2px 0 0;height:58%"></div></div><span style="font-size:3.5px;color:#334155;font-family:'JetBrains Mono',monospace">Nov</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- L-SCREEN 3: Invoice creation flow -->
+                <div class="ls screen-h">
+                  <div class="sb">
+                    <div class="sb-logo">Z</div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+                    <div class="sbi on"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                  </div>
+                  <div class="lm">
+                    <div class="ltop"><div class="ltop-l"><div class="g">New Invoice</div><div class="n">Create Tax Invoice</div></div><div class="ltop-r"><div class="icb" style="background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.2)"><svg viewBox="0 0 24 24" style="stroke:#22D3EE"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div></div>
+                    <!-- step indicator -->
+                    <div style="display:flex;align-items:center;gap:3px;margin-bottom:5px;flex-shrink:0">
+                      <div style="height:3px;width:20px;border-radius:2px;background:rgba(34,211,238,.3)"></div><span style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155">1</span>
+                      <div style="height:3px;width:28px;border-radius:2px;background:#22D3EE"></div><span style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#22D3EE">2</span>
+                      <div style="height:3px;width:20px;border-radius:2px;background:#1e1e1e"></div><span style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155">3</span>
+                      <div style="height:3px;width:20px;border-radius:2px;background:#1e1e1e"></div><span style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155">4</span>
+                    </div>
+                    <!-- client selector -->
+                    <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:8px;padding:6px 7px;margin-bottom:3px;flex-shrink:0">
+                      <div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Bill To</div>
+                      <div style="display:flex;align-items:center;gap:4px">
+                        <div style="width:18px;height:18px;border-radius:5px;background:rgba(99,102,241,.15);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:5px;font-weight:700;color:#6366F1;flex-shrink:0">PP</div>
+                        <div style="flex:1"><div style="font-size:6px;font-weight:600;color:#f1f5f9">Polokwane Property Group</div><div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;margin-top:1px">polokwane@propertygroup.co.za · Net 30</div></div>
+                        <svg viewBox="0 0 24 24" style="width:8px;height:8px;stroke:#334155;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="6 9 12 15 18 9"/></svg>
+                      </div>
+                    </div>
+                    <!-- invoice details -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;flex-shrink:0">
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px"><div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;letter-spacing:1px;margin-bottom:2px">Invoice No.</div><div style="font-family:'JetBrains Mono',monospace;font-size:6px;font-weight:600;color:#22D3EE">INV-0005</div></div>
+                      <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px"><div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155;letter-spacing:1px;margin-bottom:2px">Due Date</div><div style="font-family:'JetBrains Mono',monospace;font-size:6px;font-weight:600;color:#f1f5f9">04 Jan 2025</div></div>
+                    </div>
+                    <!-- line items -->
+                    <div class="sh"><div class="sh-t">Line Items</div><div class="sh-a">+ Add Item</div></div>
+                    <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px;margin-bottom:2px;flex-shrink:0">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px"><span style="font-size:5.5px;font-weight:600;color:#f1f5f9">Property Management Software Setup</span><span style="font-family:'JetBrains Mono',monospace;font-size:6px;font-weight:600;color:#f1f5f9">R45,000</div>
+                      <div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155">3 × R15,000 · VAT 15%</div>
+                    </div>
+                    <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:7px;padding:5px 6px;margin-bottom:2px;flex-shrink:0">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px"><span style="font-size:5.5px;font-weight:600;color:#f1f5f9">Monthly Hosting &amp; Support</span><span style="font-family:'JetBrains Mono',monospace;font-size:6px;font-weight:600;color:#f1f5f9">R3,500</div>
+                      <div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#334155">1 × R3,500 · VAT 15%</div>
+                    </div>
+                    <!-- totals -->
+                    <div style="background:rgba(34,211,238,.05);border:1px solid rgba(34,211,238,.15);border-radius:8px;padding:6px 7px;flex-shrink:0">
+                      <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:5px;color:#334155">Subtotal</span><span style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#f1f5f9">R48,500</span></div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:5px;color:#334155">VAT (15%)</span><span style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#F59E0B">R7,275</span></div>
+                      <div style="height:1px;background:#1e1e1e;margin-bottom:3px"></div>
+                      <div style="display:flex;justify-content:space-between"><span style="font-family:'Syne',sans-serif;font-size:6px;font-weight:700;color:#f1f5f9">Total</span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;color:#22D3EE">R55,775</span></div>
+                    </div>
+                    <!-- send button -->
+                    <div style="background:#22D3EE;border-radius:7px;padding:6px;text-align:center;margin-top:3px;flex-shrink:0">
+                      <span style="font-family:'Syne',sans-serif;font-size:6px;font-weight:700;color:#000">Send Invoice →</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- L-SCREEN 4: Bank reconciliation -->
+                <div class="ls screen-h">
+                  <div class="sb">
+                    <div class="sb-logo">Z</div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+                    <div class="sbi on"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+                    <div class="sbi"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                  </div>
+                  <div class="lm">
+                    <div class="ltop"><div class="ltop-l"><div class="g">Bank Reconciliation</div><div class="n">Sync &amp; Clear</div></div><div class="ltop-r"><div class="icb"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/></svg></div></div></div>
+                    <div class="recon-pulse">
+                      <div class="rp-circle"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+                      <div class="rp-t">Automated Matching</div>
+                      <div class="rp-sub">AI matching your FNB statement to invoices</div>
+                      <div class="rp-stats"><div class="rps"><div class="rps-l">Matched</div><div class="rps-v" style="color:#10B981">14</div></div><div class="rps"><div class="rps-l">Unmatched</div><div class="rps-v">03</div></div><div class="rps"><div class="rps-l">Suggestions</div><div class="rps-v" style="color:#22D3EE">08</div></div></div>
+                    </div>
+                    <div class="sh"><div class="sh-t">Pending Transactions</div><div class="sh-a">View All</div></div>
+                    <div class="irow" style="opacity:.9"><div class="iav" style="background:rgba(16,185,129,.12);color:#10B981">↑</div><div class="ibody"><div class="iname">FNB — Deposit R60,000.00</div><div class="imeta">2024-11-28 · Polokwane Property</div></div><div class="iamt" style="color:#10B981">R60,000</div><div class="ibadge" style="background:rgba(16,185,129,.1);color:#10B981">MATCH</div></div>
+                    <div class="irow" style="opacity:.9"><div class="iav" style="background:rgba(239,68,68,.12);color:#EF4444">↓</div><div class="ibody"><div class="iname">FNB — Debit R12,450.00</div><div class="imeta">2024-11-27 · Unknown</div></div><div class="iamt" style="color:#EF4444">R12,450</div><div class="ibadge" style="background:rgba(239,68,68,.1);color:#EF4444">REVIEW</div></div>
+                    <div class="irow" style="opacity:.9"><div class="iav" style="background:rgba(34,211,238,.1);color:#22D3EE">↑</div><div class="ibody"><div class="iname">FNB — Deposit R34,500.00</div><div class="imeta">2024-11-26 · Durban Tech</div></div><div class="iamt" style="color:#22D3EE">R34,500</div><div class="ibadge" style="background:rgba(34,211,238,.08);color:#22D3EE">MATCH</div></div>
+                    <div class="irow" style="opacity:.7"><div class="iav" style="background:rgba(245,158,11,.12);color:#F59E0B">?</div><div class="ibody"><div class="iname">FNB — Debit R8,900.00</div><div class="imeta">2024-11-24 · Uncleared</div></div><div class="iamt" style="color:#F59E0B">R8,900</div><div class="ibadge" style="background:rgba(245,158,11,.1);color:#F59E0B">PENDING</div></div>
+                  </div>
+                </div>
+
+              </div><!-- /scroll-track -->
+            </div><!-- /laptop-screen-frame -->
+          </div><!-- /laptop-lid -->
+          <div class="laptop-base"></div>
+        </div><!-- /laptop-wrap -->
+
+        <!-- ══ PHONE ══ -->
+        <div class="phone-wrap">
+          <div class="phone-shell">
+            <div class="phone-screen-frame">
+              <div class="phone-notch-bar"></div>
+              <!-- phone scroll track — horizontal, 4 screens -->
+              <div class="scroll-track" id="pt">
+
+                <!-- ══ P1: DASHBOARD with bar chart widget ══ -->
+                <div class="ps screen-h">
+                  <div class="pnotch-space"></div>
+                  <div class="phdr">
+                    <div class="phdr-l"><div class="pt2">Dashboard</div><div class="ps2">Acme Trading · Nov 2024</div></div>
+                    <div class="phdr-r"><div class="picb"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div></div>
+                  </div>
+                  <!-- outstanding hero -->
+                  <div class="pstat-hero">
+                    <div class="psh-l">Total Outstanding</div>
+                    <div class="psh-v">R126,375</div>
+                    <div class="psh-tags">
+                      <div class="psh-tag" style="background:rgba(239,68,68,.12);color:#EF4444">1 overdue</div>
+                      <div class="psh-tag" style="background:rgba(34,211,238,.1);color:#22D3EE">4 active</div>
+                    </div>
+                  </div>
+                  <!-- 4-stat grid -->
+                  <div class="p4g">
+                    <div class="p4c"><div class="p4c-l">Collected</div><div class="p4c-v" style="color:#10B981">R40,250</div></div>
+                    <div class="p4c"><div class="p4c-l">Overdue</div><div class="p4c-v" style="color:#EF4444">R31,625</div></div>
+                    <div class="p4c"><div class="p4c-l">Expenses</div><div class="p4c-v" style="color:#F59E0B">R45,593</div></div>
+                    <div class="p4c"><div class="p4c-l">Net</div><div class="p4c-v" style="color:#22D3EE">R42,907</div></div>
+                  </div>
+                  <!-- mini bar chart widget -->
+                  <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:7px 8px;flex-shrink:0">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                      <span style="font-family:'Syne',sans-serif;font-size:6px;font-weight:700;color:#f1f5f9">6-Month Revenue</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#10B981">↑ 24%</span>
+                    </div>
+                    <div style="display:flex;align-items:flex-end;gap:3px;height:30px">
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px">
+                        <div style="width:100%;background:#10B981;opacity:.5;border-radius:2px 2px 0 0;height:40%"></div>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#374151">J</span>
+                      </div>
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px">
+                        <div style="width:100%;background:#10B981;opacity:.6;border-radius:2px 2px 0 0;height:55%"></div>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#374151">A</span>
+                      </div>
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px">
+                        <div style="width:100%;background:#10B981;opacity:.65;border-radius:2px 2px 0 0;height:48%"></div>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#374151">S</span>
+                      </div>
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px">
+                        <div style="width:100%;background:#10B981;opacity:.75;border-radius:2px 2px 0 0;height:68%"></div>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#374151">O</span>
+                      </div>
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px">
+                        <div style="width:100%;background:#10B981;opacity:.88;border-radius:2px 2px 0 0;height:82%"></div>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#374151">N</span>
+                      </div>
+                      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px">
+                        <div style="width:100%;background:#22D3EE;border-radius:2px 2px 0 0;height:95%;box-shadow:0 0 5px rgba(34,211,238,.4)"></div>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:3.5px;color:#22D3EE;font-weight:700">D</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- recent invoice -->
+                  <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:7px 8px;display:flex;align-items:center;gap:6px;flex-shrink:0">
+                    <div style="width:22px;height:22px;border-radius:6px;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:6px;font-weight:700;color:#EF4444;flex-shrink:0">CF</div>
+                    <div style="flex:1"><div style="font-size:7px;font-weight:600;color:#f1f5f9">Cape Fresh Produce</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#374151;margin-top:1px">INV-0002 · 16 days overdue</div></div>
+                    <div style="text-align:right;flex-shrink:0"><div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;color:#EF4444">R31,625</div><div style="background:rgba(239,68,68,.1);color:#EF4444;font-size:4.5px;font-weight:700;padding:1px 5px;border-radius:5px;margin-top:2px">OVERDUE</div></div>
+                  </div>
+                  <div class="pnav">
+                    <div class="pni a"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><div class="pni-l">Home</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="pni-l">Invoices</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><div class="pni-l">Expenses</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><div class="pni-l">Bank</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg><div class="pni-l">More</div></div>
+                  </div>
+                </div>
+
+                <!-- ══ P2: EXPENSES with donut + category breakdown ══ -->
+                <div class="ps screen-h">
+                  <div class="pnotch-space"></div>
+                  <div class="phdr">
+                    <div class="phdr-l"><div class="pt2">Expenses</div><div class="ps2">November 2024</div></div>
+                    <div class="phdr-r"><div class="picb" style="background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.2)"><svg viewBox="0 0 24 24" style="stroke:#22D3EE"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+                  </div>
+                  <!-- total -->
+                  <div style="background:#0d0d0d;border:1px solid rgba(245,158,11,.2);border-radius:11px;padding:9px 10px;flex-shrink:0">
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;color:#374151;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Total This Month</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:#f1f5f9;letter-spacing:-1px">R45,593</div>
+                    <div style="display:flex;align-items:center;gap:5px;margin-top:3px">
+                      <span style="background:rgba(16,185,129,.12);color:#10B981;font-family:'JetBrains Mono',monospace;font-size:4.5px;font-weight:700;padding:2px 6px;border-radius:5px">R12,340 VAT reclaimable</span>
+                    </div>
+                  </div>
+                  <!-- category breakdown with coloured bars -->
+                  <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:8px;flex-shrink:0">
+                    <div style="font-family:'Syne',sans-serif;font-size:5.5px;font-weight:700;color:#f1f5f9;margin-bottom:7px">By Category</div>
+                    <div style="display:flex;flex-direction:column;gap:5px">
+                      <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:5.5px;color:#f1f5f9">Equipment</span><span style="font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#f1f5f9">R18,900</span></div>
+                        <div style="height:4px;background:#1a1a1a;border-radius:2px"><div style="height:100%;width:82%;background:#22D3EE;border-radius:2px"></div></div>
+                      </div>
+                      <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:5.5px;color:#f1f5f9">Travel & Fuel</span><span style="font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#f1f5f9">R12,234</span></div>
+                        <div style="height:4px;background:#1a1a1a;border-radius:2px"><div style="height:100%;width:53%;background:#F59E0B;border-radius:2px"></div></div>
+                      </div>
+                      <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:5.5px;color:#f1f5f9">Software</span><span style="font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#f1f5f9">R8,459</span></div>
+                        <div style="height:4px;background:#1a1a1a;border-radius:2px"><div style="height:100%;width:37%;background:#6366F1;border-radius:2px"></div></div>
+                      </div>
+                      <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:5.5px;color:#f1f5f9">Office & Admin</span><span style="font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#f1f5f9">R6,000</span></div>
+                        <div style="height:4px;background:#1a1a1a;border-radius:2px"><div style="height:100%;width:26%;background:#10B981;border-radius:2px"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- recent expenses -->
+                  <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:6px 8px;display:flex;align-items:center;gap:5px;flex-shrink:0">
+                    <div style="width:20px;height:20px;border-radius:6px;background:rgba(34,211,238,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:#22D3EE;fill:none;stroke-width:2;stroke-linecap:round"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></div>
+                    <div style="flex:1"><div style="font-size:7px;font-weight:600;color:#f1f5f9">Loadshedding UPS</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#374151">Equipment · Receipt ✓</div></div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;color:#f1f5f9;flex-shrink:0">R8,900</div>
+                  </div>
+                  <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:6px 8px;display:flex;align-items:center;gap:5px;flex-shrink:0">
+                    <div style="width:20px;height:20px;border-radius:6px;background:rgba(245,158,11,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:#F59E0B;fill:none;stroke-width:2;stroke-linecap:round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg></div>
+                    <div style="flex:1"><div style="font-size:7px;font-weight:600;color:#f1f5f9">Fuel — FNB Card</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#374151">Travel · Auto-imported</div></div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;color:#f1f5f9;flex-shrink:0">R2,340</div>
+                  </div>
+                  <div class="pnav">
+                    <div class="pni"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><div class="pni-l">Home</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="pni-l">Invoices</div></div>
+                    <div class="pni a"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><div class="pni-l">Expenses</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><div class="pni-l">Bank</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg><div class="pni-l">More</div></div>
+                  </div>
+                </div>
+
+                <!-- ══ P3: BANK RECONCILIATION widget ══ -->
+                <div class="ps screen-h">
+                  <div class="pnotch-space"></div>
+                  <div class="phdr">
+                    <div class="phdr-l"><div class="pt2">Bank Sync</div><div class="ps2">FNB · November 2024</div></div>
+                    <div class="phdr-r"><div class="picb"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/></svg></div></div>
+                  </div>
+                  <!-- sync status widget -->
+                  <div style="background:#0d0d0d;border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:10px;flex-shrink:0;position:relative;overflow:hidden">
+                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#10B981,transparent)"></div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                      <div style="width:28px;height:28px;border-radius:8px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                        <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#10B981;fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                      </div>
+                      <div><div style="font-family:'Syne',sans-serif;font-size:8px;font-weight:700;color:#f1f5f9">Auto-matching active</div><div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;color:#374151;margin-top:1px">AI matching deposits to invoices</div></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">
+                      <div style="background:#111;border-radius:7px;padding:5px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#10B981">14</div><div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#374151;text-transform:uppercase;margin-top:1px">Matched</div></div>
+                      <div style="background:#111;border-radius:7px;padding:5px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#f1f5f9">3</div><div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#374151;text-transform:uppercase;margin-top:1px">Unmatched</div></div>
+                      <div style="background:#111;border-radius:7px;padding:5px;text-align:center"><div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#22D3EE">8</div><div style="font-family:'JetBrains Mono',monospace;font-size:4px;color:#374151;text-transform:uppercase;margin-top:1px">Suggested</div></div>
+                    </div>
+                  </div>
+                  <!-- transactions -->
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:4.5px;color:#374151;text-transform:uppercase;letter-spacing:1px;flex-shrink:0">Pending review</div>
+                  <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:7px 8px;display:flex;align-items:center;gap:6px;flex-shrink:0">
+                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:9px;height:9px;stroke:#10B981;fill:none;stroke-width:2.5;stroke-linecap:round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
+                    <div style="flex:1"><div style="font-size:6.5px;font-weight:600;color:#f1f5f9">FNB Deposit R60,000</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#374151">28 Nov · Polokwane Property</div></div>
+                    <div style="background:rgba(16,185,129,.1);color:#10B981;font-size:4.5px;font-weight:700;padding:2px 6px;border-radius:5px;flex-shrink:0">MATCH</div>
+                  </div>
+                  <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:7px 8px;display:flex;align-items:center;gap:6px;flex-shrink:0">
+                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:9px;height:9px;stroke:#EF4444;fill:none;stroke-width:2.5;stroke-linecap:round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+                    <div style="flex:1"><div style="font-size:6.5px;font-weight:600;color:#f1f5f9">FNB Debit R12,450</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#374151">27 Nov · Unknown payee</div></div>
+                    <div style="background:rgba(239,68,68,.1);color:#EF4444;font-size:4.5px;font-weight:700;padding:2px 6px;border-radius:5px;flex-shrink:0">REVIEW</div>
+                  </div>
+                  <div style="background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:7px 8px;display:flex;align-items:center;gap:6px;flex-shrink:0">
+                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(34,211,238,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:9px;height:9px;stroke:#22D3EE;fill:none;stroke-width:2.5;stroke-linecap:round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
+                    <div style="flex:1"><div style="font-size:6.5px;font-weight:600;color:#f1f5f9">FNB Deposit R34,500</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#374151">26 Nov · Durban Tech Solutions</div></div>
+                    <div style="background:rgba(34,211,238,.08);color:#22D3EE;font-size:4.5px;font-weight:700;padding:2px 6px;border-radius:5px;flex-shrink:0">MATCH</div>
+                  </div>
+                  <div class="pnav">
+                    <div class="pni"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><div class="pni-l">Home</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="pni-l">Invoices</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><div class="pni-l">Expenses</div></div>
+                    <div class="pni a"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><div class="pni-l">Bank</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg><div class="pni-l">More</div></div>
+                  </div>
+                </div>
+
+                <!-- ══ P4: INVOICE CREATION with totals ══ -->
+                <div class="ps screen-h">
+                  <div class="pnotch-space"></div>
+                  <div class="phdr">
+                    <div class="phdr-l"><div class="pt2">New Invoice</div><div class="ps2">Step 3 of 4 · Line items</div></div>
+                    <div class="phdr-r"><div class="picb"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
+                  </div>
+                  <!-- step bar -->
+                  <div style="display:flex;gap:3px;flex-shrink:0">
+                    <div style="height:3px;flex:1;border-radius:2px;background:#10B981"></div>
+                    <div style="height:3px;flex:1;border-radius:2px;background:#10B981"></div>
+                    <div style="height:3px;flex:1;border-radius:2px;background:#22D3EE;box-shadow:0 0 5px rgba(34,211,238,.4)"></div>
+                    <div style="height:3px;flex:1;border-radius:2px;background:#1e1e1e"></div>
+                  </div>
+                  <!-- client chip -->
+                  <div style="background:#0d0d0d;border:1px solid rgba(34,211,238,.2);border-radius:10px;padding:7px 8px;display:flex;align-items:center;gap:6px;flex-shrink:0">
+                    <div style="width:22px;height:22px;border-radius:6px;background:rgba(99,102,241,.15);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:6px;font-weight:700;color:#6366F1;flex-shrink:0">PP</div>
+                    <div style="flex:1"><div style="font-size:7px;font-weight:600;color:#f1f5f9">Polokwane Property Group</div><div style="font-family:'JetBrains Mono',monospace;font-size:5px;color:#374151">INV-0006 · Due 31 Jan 2025</div></div>
+                  </div>
+                  <!-- line item -->
+                  <div style="background:#0d0d0d;border:1px solid rgba(34,211,238,.15);border-radius:11px;padding:8px;flex-shrink:0">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+                      <span style="font-size:7px;font-weight:600;color:#f1f5f9;max-width:65%;line-height:1.3">Property Mgmt Software Setup</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#f1f5f9">R45,000</span>
+                    </div>
+                    <div style="display:flex;gap:4px">
+                      <div style="background:#111;border-radius:5px;padding:2px 5px;font-family:'JetBrains Mono',monospace;font-size:5px;color:#374151">3 × R15,000</div>
+                      <div style="background:rgba(245,158,11,.1);border-radius:5px;padding:2px 5px;font-family:'JetBrains Mono',monospace;font-size:5px;color:#F59E0B">VAT 15%</div>
+                    </div>
+                  </div>
+                  <!-- add item -->
+                  <div style="background:rgba(34,211,238,.04);border:1px dashed rgba(34,211,238,.18);border-radius:10px;padding:7px;display:flex;align-items:center;justify-content:center;gap:5px;flex-shrink:0">
+                    <svg viewBox="0 0 24 24" style="width:9px;height:9px;stroke:#22D3EE;fill:none;stroke-width:2.5;stroke-linecap:round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span style="font-size:6.5px;color:#22D3EE;font-weight:600;font-family:'Syne',sans-serif">Add another item</span>
+                  </div>
+                  <!-- totals -->
+                  <div style="background:rgba(34,211,238,.04);border:1px solid rgba(34,211,238,.12);border-radius:11px;padding:8px;flex-shrink:0">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:5.5px;color:#374151">Subtotal</span><span style="font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#94a3b8">R45,000</span></div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:5.5px;color:#374151">VAT (15%)</span><span style="font-family:'JetBrains Mono',monospace;font-size:5.5px;color:#F59E0B">R6,750</span></div>
+                    <div style="height:1px;background:#1e1e1e;margin-bottom:4px"></div>
+                    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Syne',sans-serif;font-size:7px;font-weight:700;color:#f1f5f9">Total</span><span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#22D3EE">R51,750</span></div>
+                  </div>
+                  <div style="background:#22D3EE;border-radius:11px;padding:9px;text-align:center;flex-shrink:0">
+                    <span style="font-family:'Syne',sans-serif;font-size:8px;font-weight:700;color:#000;letter-spacing:.3px">Review &amp; Send Invoice →</span>
+                  </div>
+                  <div class="pnav">
+                    <div class="pni"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><div class="pni-l">Home</div></div>
+                    <div class="pni a"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="pni-l">Invoices</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><div class="pni-l">Expenses</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><div class="pni-l">Bank</div></div>
+                    <div class="pni"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg><div class="pni-l">More</div></div>
+                  </div>
+                </div>
+
+              </div><!-- /phone scroll track -->
+
+            </div><!-- /phone-screen-frame -->
+          </div><!-- /phone-shell -->
+        </div><!-- /phone-wrap -->
+
+      </div><!-- /devices -->
+    </div><!-- /hero-grid -->
+
+    <!-- MINI TESTIMONIAL CAROUSEL -->
+    <div class="mini-testi fade">
+      <div class="mini-testi-track" id="mtTrack">
+
+        <div class="mini-testi-slide">
+          <div class="mt-av" style="background:rgba(34,211,238,.15);color:var(--cy)">SK</div>
+          <div class="mt-body">
+            <div class="mt-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="mt-q">I sent my first invoice in under five minutes and actually understood every line on it. That's never happened before with any finance tool.</p>
+            <div class="mt-who">
+              <div><div class="mt-name">Sipho Khumalo</div><div class="mt-role">Khumalo Consulting · Sandton</div></div>
+              <div class="mt-tag">BETA TESTER</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-testi-slide">
+          <div class="mt-av" style="background:rgba(245,158,11,.12);color:var(--am)">JB</div>
+          <div class="mt-body">
+            <div class="mt-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="mt-q">I'm a builder, not a bookkeeper. Zande is the first app that actually works like that — no jargon, no setup. My books just keep themselves.</p>
+            <div class="mt-who">
+              <div><div class="mt-name">Johannes Botha</div><div class="mt-role">Property Developer · Polokwane</div></div>
+              <div class="mt-tag">BETA TESTER</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-testi-slide">
+          <div class="mt-av" style="background:rgba(16,185,129,.15);color:var(--gn)">AV</div>
+          <div class="mt-body">
+            <div class="mt-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="mt-q">Zande replaced three tools and an Excel spreadsheet. Every record is kept automatically. I haven't touched a spreadsheet since I signed up.</p>
+            <div class="mt-who">
+              <div><div class="mt-name">Annika van den Berg</div><div class="mt-role">Importer · Cape Town</div></div>
+              <div class="mt-tag">BETA TESTER</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-testi-slide">
+          <div class="mt-av" style="background:rgba(239,68,68,.12);color:var(--rd)">TM</div>
+          <div class="mt-body">
+            <div class="mt-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="mt-q">My accountant used to spend an hour explaining my own finances. Now I open Zande and see everything myself in two minutes. It's changed how I run my business.</p>
+            <div class="mt-who">
+              <div><div class="mt-name">Thabo Mokoena</div><div class="mt-role">TM Construction · Soweto</div></div>
+              <div class="mt-tag">BETA TESTER</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-testi-slide">
+          <div class="mt-av" style="background:rgba(99,102,241,.12);color:var(--vi)">RD</div>
+          <div class="mt-body">
+            <div class="mt-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="mt-q">No more paper receipts. No more missing records. Everything is stored automatically — and it's all there when SARS needs it.</p>
+            <div class="mt-who">
+              <div><div class="mt-name">Riana du Plessis</div><div class="mt-role">Fresh Media · Stellenbosch</div></div>
+              <div class="mt-tag">BETA TESTER</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /mini-testi-track -->
+      <div class="mini-testi-dots" id="mtDots">
+        <button class="mt-dot on" onclick="mtGo(0)"></button>
+        <button class="mt-dot" onclick="mtGo(1)"></button>
+        <button class="mt-dot" onclick="mtGo(2)"></button>
+        <button class="mt-dot" onclick="mtGo(3)"></button>
+        <button class="mt-dot" onclick="mtGo(4)"></button>
+      </div>
+    </div><!-- /mini-testi -->
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip fade">
+      <div class="stats-grid">
+        <div class="stat-item"><div class="stat-val" style="color:var(--cy)" id="stat-n">247+</div><div class="stat-lbl">Businesses signed up</div></div>
+        <div class="stat-item"><div class="stat-val" style="color:var(--gn)">9</div><div class="stat-lbl">Provinces</div></div>
+        <div class="stat-item"><div class="stat-val" style="color:var(--am)">100%</div><div class="stat-lbl">Records kept automatically</div></div>
+        <div class="stat-item"><div class="stat-val">TBA</div><div class="stat-lbl">Public launch</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section style="padding:80px 0;border-bottom:1px solid var(--bd)">
+  <div class="wrap">
+    <p style="font-family:var(--fm);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:2.5px;text-align:center;margin-bottom:28px">Zande is for Businesses. Built for Businesses.</p>
+    <div class="who-pills">
+      <div class="wpill"><div class="wd" style="background:var(--gn)"></div>Small &amp; Medium Businesses</div>
+      <div class="wpill"><div class="wd" style="background:var(--cy)"></div>(Pty) Ltd Companies</div>
+      <div class="wpill"><div class="wd" style="background:var(--am)"></div>Close Corporations</div>
+      <div class="wpill"><div class="wd" style="background:#F9A8D4"></div>Sole Proprietors</div>
+      <div class="wpill"><div class="wd" style="background:var(--vi)"></div>Service Businesses</div>
+      <div class="wpill"><div class="wd" style="background:#67E8F9"></div>Trades &amp; Construction</div>
+      <div class="wpill"><div class="wd" style="background:#FB923C"></div>Retail &amp; E-Commerce</div>
+      <div class="wpill"><div class="wd" style="background:var(--rd)"></div>Any business with books to keep</div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN -->
+<section>
+  <div class="wrap">
+    <div class="fade"><p class="sec-ey">The problem</p><h2 class="sec-h">Your business deserves<br>proper books.<br><span class="grad">Zande keeps them for you.</span></h2><p class="sec-sub">Most SA businesses run on WhatsApp receipts, Excel spreadsheets and year-end panic. Zande replaces all of that — every transaction recorded, every record kept, every return ready.</p></div>
+    <div class="card-grid">
+      <div class="card fade"><span class="card-em">📊</span><div class="card-t">Accounting done for you</div><div class="card-d">No more spreadsheets. No more manual entry. Zande automatically records every invoice, expense and payment — your books update in real time, always accurate.</div></div>
+      <div class="card fade"><span class="card-em">🗂️</span><div class="card-t">All financial records kept</div><div class="card-d">Every transaction, receipt, invoice and bank statement stored, organised and searchable. SARS asks for records going back 5 years — Zande has them.</div></div>
+      <div class="card fade"><span class="card-em">📁</span><div class="card-t">No more missing receipts</div><div class="card-d">Snap a photo of any receipt on your phone. It's stored, categorised and attached to the right expense immediately — no paper, no shoebox, no excuses.</div></div>
+      <div class="card fade"><span class="card-em">😤</span><div class="card-t">Chasing payments for weeks</div><div class="card-d">You've sent the invoice three times. Your client still hasn't paid and you don't know if they even opened it.</div></div>
+      <div class="card fade"><span class="card-em">😰</span><div class="card-t">"What do I owe SARS?"</div><div class="card-d">VAT returns, provisional tax — you know it's due, you're just not sure how much or when. Zande calculates it automatically.</div></div>
+      <div class="card fade"><span class="card-em">🌍</span><div class="card-t">Tools built for somewhere else</div><div class="card-d">Xero and QuickBooks weren't built for SA banking, our VAT rules, or the way SA businesses actually operate.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="alt" id="features">
+  <div class="wrap">
+    <div class="fade" style="text-align:center;margin-bottom:52px"><p class="sec-ey">The solution</p><h2 class="sec-h">Accounting &amp; bookkeeping<br>done for you. Every record kept.</h2><p class="sec-sub" style="margin:0 auto;text-align:center;max-width:540px">No spreadsheets. No paper receipts. No year-end scramble. Zande keeps your business books accurate and complete — automatically, all year round.</p></div>
+    <div class="card-grid">
+      <div class="card f-cy fade"><div class="feat-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div><div class="card-t">Invoices in 60 seconds</div><div class="card-d">Fill in who, what, and how much — Zande creates a SARS-compliant tax invoice, sends it by email, and tracks when it gets opened.</div></div>
+      <div class="card f-gn fade"><div class="feat-ico"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div><div class="card-t">Bank reconciliation, done</div><div class="card-d">Import your FNB, Absa or Nedbank statement. Zande matches every deposit to an invoice automatically. Your books are always in sync.</div></div>
+      <div class="card f-rd fade"><div class="feat-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div><div class="card-t">VAT &amp; tax, calculated for you</div><div class="card-d">Zande tracks every rand of output and input VAT as you go. When the period ends, your VAT201 is ready. No manual maths, no errors.</div></div>
+      <div class="card f-am fade"><div class="feat-ico"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div><div class="card-t">No more missing receipts</div><div class="card-d">Snap any receipt on your phone. Zande stores it, categorises the expense, and attaches it to the right transaction. No paper. No shoebox.</div></div>
+      <div class="card f-vi fade"><div class="feat-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="card-t">All financial records kept</div><div class="card-d">Every invoice, payment, expense and bank transaction stored and organised forever. Replace your spreadsheets with a single source of truth.</div></div>
+      <div class="card f-pk fade"><div class="feat-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="card-t">SARS audit trail, always ready</div><div class="card-d">Every rand tracked, every action timestamped. If SARS asks for 5 years of records tomorrow — they're already there, already organised.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FREEMIUM -->
+<section>
+  <div class="wrap">
+    <div class="fm-box fade">
+      <div class="fm-top">
+        <div>
+          <div class="fm-eyebrow"><div class="pulse-dot"></div>Built for Businesses</div>
+          <h2 class="fm-h">Zande is for Businesses.<br><em>Built for Businesses.</em></h2>
+          <p class="fm-p" style="margin-bottom:14px"><strong>Accounting and bookkeeping done for you.</strong> Every invoice, expense, receipt and bank transaction — recorded, organised and kept. Replace your spreadsheets and paper receipts with one complete business financial system.</p>
+          <p class="fm-p" style="margin-bottom:14px">Whether you're a (Pty) Ltd, a CC or a sole proprietor — <strong>if you run a business in South Africa, Zande was built for you.</strong> Not adapted. Not retrofitted. Built from scratch for how SA businesses actually operate.</p>
+          <p class="fm-p">We're in beta and we want your business on the platform. <strong>Free access, no payment required.</strong> Help us build something SA business genuinely needs.</p>
+        </div>
+        <div>
+          <div class="fm-card">
+            <div class="fm-card-top">
+              <div><div class="fm-tier">Beta Tester Account</div><div style="font-size:10px;color:var(--t3);margin-top:2px;font-family:var(--fm)">No payment required</div></div>
+              <div><span class="fm-price">Free</span><span class="fm-price-lbl">forever</span></div>
+            </div>
+            <div class="fm-items">
+              <div class="fm-item"><div class="fm-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Full invoicing suite — unlimited invoices</div>
+              <div class="fm-item"><div class="fm-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Client management &amp; payment tracking</div>
+              <div class="fm-item"><div class="fm-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Expense tracking with receipt capture</div>
+              <div class="fm-item"><div class="fm-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Bank statement import &amp; reconciliation</div>
+              <div class="fm-item"><div class="fm-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>VAT201-ready SARS reports</div>
+              <div class="fm-item"><div class="fm-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>P&amp;L, ageing analysis, cash flow reports</div>
+              <div class="fm-item"><div class="fm-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Direct line to the founding team</div>
+            </div>
+            <div class="fm-foot"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>No credit card · No payment required during beta</div>
+          </div>
+        </div>
+      </div>
+      <div class="fm-bottom">
+        <div class="fm-promise"><span style="font-size:20px">🧪</span><div><strong>Our promise:</strong> Full platform access, no payments required. Help us build something SA actually needs.</div></div>
+        <button class="fm-join" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Create Free Beta Account →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="fade" style="text-align:center;margin-bottom:36px">
+      <p class="sec-ey">What SA businesses say</p>
+      <h2 class="sec-h" style="font-size:clamp(26px,4vw,44px)">Real businesses.<br>Real books. Done automatically.</h2>
+    </div>
+
+    <!-- carousel nav -->
+    <div class="tcarousel-nav fade">
+      <button class="tnav-btn" onclick="tPrev()" aria-label="Previous"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <button class="tnav-btn" onclick="tNext()" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></button>
+    </div>
+
+    <!-- carousel track -->
+    <div class="testi-carousel fade">
+      <div class="testi-track" id="tTrack">
+
+        <!-- SLIDE 1 -->
+        <div class="testi-slide">
+          <div class="testi-big">
+            <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="tbq">I always thought accounting was something only trained people could do. Zande just shows you what's happening with your money in plain terms. I sent my first real invoice in under five minutes and actually understood every line on it.</p>
+            <div class="testi-meta"><div class="tav" style="background:rgba(34,211,238,.15);color:var(--cy)">SK</div><div><div class="t-name">Sipho Khumalo</div><div class="t-role">Founder, Khumalo Consulting · Sandton, Gauteng</div></div><div class="t-tag">BETA TESTER</div></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="testi-slide">
+          <div class="testi-big">
+            <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="tbq">I always handed everything to my accountant because I had no idea what I was looking at. Zande shows you in plain words. I finally understand my own finances — and I'm saving R4,000 a month in accounting fees.</p>
+            <div class="testi-meta"><div class="tav" style="background:rgba(16,185,129,.15);color:var(--gn)">AV</div><div><div class="t-name">Annika van den Berg</div><div class="t-role">Importer · Cape Town, WC</div></div><div class="t-tag">BETA TESTER</div></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="testi-slide">
+          <div class="testi-big">
+            <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="tbq">I'm a builder, not a bookkeeper. I just want to send invoices and know if I'm making money. Zande is the first app that actually works like that — no jargon, no setup, just done.</p>
+            <div class="testi-meta"><div class="tav" style="background:rgba(245,158,11,.12);color:var(--am)">JB</div><div><div class="t-name">Johannes Botha</div><div class="t-role">Property developer · Polokwane, LP</div></div><div class="t-tag">BETA TESTER</div></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="testi-slide">
+          <div class="testi-big">
+            <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="tbq">My accountant used to spend an hour explaining things I didn't understand. Now I just open Zande and I can see everything myself in two minutes. It's changed how I run my business completely.</p>
+            <div class="testi-meta"><div class="tav" style="background:rgba(239,68,68,.12);color:var(--rd)">TM</div><div><div class="t-name">Thabo Mokoena</div><div class="t-role">Director · TM Construction · Soweto</div></div><div class="t-tag">BETA TESTER</div></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 5 -->
+        <div class="testi-slide">
+          <div class="testi-big">
+            <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="tbq">My previous accounting software made me feel stupid every time I used it. Zande makes me feel in control. That difference is everything when you're running a business alone.</p>
+            <div class="testi-meta"><div class="tav" style="background:rgba(99,102,241,.12);color:var(--vi)">RD</div><div><div class="t-name">Riana du Plessis</div><div class="t-role">Co-founder · Fresh Media · Stellenbosch</div></div><div class="t-tag">BETA TESTER</div></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 6 -->
+        <div class="testi-slide">
+          <div class="testi-big">
+            <div class="tstars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            <p class="tbq">I was using three different tools and still confused. Zande replaced all of them with one thing that actually made sense. The VAT calculation alone saves me hours every two months.</p>
+            <div class="testi-meta"><div class="tav" style="background:rgba(249,168,212,.12);color:#F9A8D4">LN</div><div><div class="t-name">Lerato Nkosi</div><div class="t-role">Freelance designer · Durban, KZN</div></div><div class="t-tag">BETA TESTER</div></div>
+          </div>
+        </div>
+
+      </div><!-- /testi-track -->
+    </div><!-- /testi-carousel -->
+
+    <!-- dots -->
+    <div class="tcarousel-dots fade" id="tDots">
+      <button class="tcarousel-dot on" onclick="tGo(0)"></button>
+      <button class="tcarousel-dot" onclick="tGo(1)"></button>
+      <button class="tcarousel-dot" onclick="tGo(2)"></button>
+      <button class="tcarousel-dot" onclick="tGo(3)"></button>
+      <button class="tcarousel-dot" onclick="tGo(4)"></button>
+      <button class="tcarousel-dot" onclick="tGo(5)"></button>
+    </div>
+
+    <!-- ticker unchanged -->
+    <div class="ticker" style="margin-top:32px">
+      <div class="ticker-track">
+        <div class="tkt"><div class="tkt-q">I genuinely thought accounting software was only for people who knew what debits and credits meant. Zande proved me wrong.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(34,211,238,.15);color:var(--cy)">NZ</div><div><div class="tkt-n">Nompumelelo Z.</div><div class="tkt-r">Retailer, East London</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">Sent my first invoice in 3 minutes. Didn't read a single help article. That's how easy it is.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(16,185,129,.15);color:var(--gn)">BM</div><div><div class="tkt-n">Bongani M.</div><div class="tkt-r">IT Consultant, Pretoria</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">Every other tool made me feel like I needed a finance degree. Zande speaks like a normal person. It's honestly refreshing.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(245,158,11,.12);color:var(--am)">CL</div><div><div class="tkt-n">Chantal L.</div><div class="tkt-r">Events planner, Joburg</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">My whole team uses it now. Nobody needed training. They just opened it and figured it out. That says everything.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(99,102,241,.12);color:var(--vi)">KV</div><div><div class="tkt-n">Kevin V.</div><div class="tkt-r">Engineering firm, Midrand</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">SARS compliance used to terrify me. Zande handles it automatically — I don't even have to think about it anymore.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(249,168,212,.12);color:#F9A8D4">SS</div><div><div class="tkt-n">Sindisiwe S.</div><div class="tkt-r">Accountant, Cape Town</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">I'm a plumber. I don't want to do accounting. Zande does it for me while I'm on site. Perfect.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(251,146,60,.12);color:#FB923C">RN</div><div><div class="tkt-n">Riaan N.</div><div class="tkt-r">Plumber, George, WC</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">I genuinely thought accounting software was only for people who knew what debits and credits meant. Zande proved me wrong.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(34,211,238,.15);color:var(--cy)">NZ</div><div><div class="tkt-n">Nompumelelo Z.</div><div class="tkt-r">Retailer, East London</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">Sent my first invoice in 3 minutes. Didn't read a single help article. That's how easy it is.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(16,185,129,.15);color:var(--gn)">BM</div><div><div class="tkt-n">Bongani M.</div><div class="tkt-r">IT Consultant, Pretoria</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">Every other tool made me feel like I needed a finance degree. Zande speaks like a normal person. It's honestly refreshing.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(245,158,11,.12);color:var(--am)">CL</div><div><div class="tkt-n">Chantal L.</div><div class="tkt-r">Events planner, Joburg</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">My whole team uses it now. Nobody needed training. They just opened it and figured it out. That says everything.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(99,102,241,.12);color:var(--vi)">KV</div><div><div class="tkt-n">Kevin V.</div><div class="tkt-r">Engineering firm, Midrand</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">SARS compliance used to terrify me. Zande handles it automatically — I don't even have to think about it anymore.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(249,168,212,.12);color:#F9A8D4">SS</div><div><div class="tkt-n">Sindisiwe S.</div><div class="tkt-r">Accountant, Cape Town</div></div></div></div>
+        <div class="tkt"><div class="tkt-q">I'm a plumber. I don't want to do accounting. Zande does it for me while I'm on site. Perfect.</div><div class="tkt-auth"><div class="tkt-av" style="background:rgba(251,146,60,.12);color:#FB923C">RN</div><div><div class="tkt-n">Riaan N.</div><div class="tkt-r">Plumber, George, WC</div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section>
+  <div class="wrap">
+    <div class="fade" style="text-align:center;margin-bottom:60px"><p class="sec-ey">How it works</p><h2 class="sec-h">Set up in 5 minutes.<br>No training required.</h2></div>
+    <div class="how-grid">
+      <div class="how-step fade"><div class="how-n">01</div><div class="how-t">Create your account</div><div class="how-d">Email only. Tell us your business name and type. No forms, no accountant needed.</div></div>
+      <div class="how-step fade"><div class="how-n">02</div><div class="how-t">Add a client</div><div class="how-d">Just a name and email address. Zande stores their details and payment terms for next time.</div></div>
+      <div class="how-step fade"><div class="how-n">03</div><div class="how-t">Send your first invoice</div><div class="how-d">Type what you did and the amount. Zande creates a legal SA tax invoice and sends it for you.</div></div>
+      <div class="how-step fade"><div class="how-n">04</div><div class="how-t">Watch it all connect</div><div class="how-d">Payments, expenses, bank transactions — Zande links everything automatically. Your books keep themselves.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SARS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="sars-box fade">
+      <p class="sec-ey" style="display:flex;justify-content:center">🇿🇦 Built for South Africa</p>
+      <h2 class="sec-h" style="max-width:560px;margin:0 auto 14px;text-align:center;font-size:clamp(26px,4vw,44px)">SARS compliance built in — not bolted on.</h2>
+      <p style="font-size:15px;color:var(--t2);max-width:480px;margin:0 auto;line-height:1.68;text-align:center">Every SA business has tax obligations. Zande handles them automatically — VAT, provisional tax, audit trails — so your business is always compliant, without the stress.</p>
+      <div class="sars-pills">
+        <div class="spill">✅ VAT201 calculations built-in</div>
+        <div class="spill">✅ Section 20 tax invoice format</div>
+        <div class="spill">✅ Two-monthly VAT periods</div>
+        <div class="spill">✅ Immutable SARS audit trail</div>
+        <div class="spill">✅ POPIA compliant</div>
+        <div class="spill">✅ Data hosted in Cape Town (af-south-1)</div>
+        <div class="spill">✅ FNB, Absa, Nedbank, Standard Bank</div>
+        <div class="spill">✅ ZAR — no currency confusion</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="wrap">
+    <div class="fade" style="text-align:center;margin-bottom:44px"><p class="sec-ey">FAQ</p><h2 class="sec-h" style="font-size:clamp(24px,3.5vw,40px)">Questions we get asked.</h2></div>
+    <div class="faq-list">
+      <div class="faq-item fade" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-qt">Do I need accounting knowledge to use Zande?</div><div class="faq-ic">+</div></div><div class="faq-a">Not at all. Zande is designed for people who run businesses, not people who studied accounting. Everything uses plain language — if you can fill out a basic form, you can use Zande. We explain what each thing means as you go.</div></div>
+      <div class="faq-item fade" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-qt">Is it really free during the beta?</div><div class="faq-ic">+</div></div><div class="faq-a">Yes. Create an account and use the full platform — no payment required at any stage of testing. We haven't set pricing yet. We want to speak to real users first and price it fairly based on what people actually find valuable.</div></div>
+      <div class="faq-item fade" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-qt">Is Zande built for South Africa specifically?</div><div class="faq-ic">+</div></div><div class="faq-a">Entirely. ZAR currency, SA bank formats, SARS VAT201 calculations, two-monthly VAT periods, and data hosted in Cape Town under POPIA. Not a foreign product with SA tax bolted on as an afterthought.</div></div>
+      <div class="faq-item fade" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-qt">Is my financial data safe?</div><div class="faq-ic">+</div></div><div class="faq-a">Yes. All data is hosted in Supabase's Cape Town region (af-south-1), encrypted at rest and in transit. Row-level security means your data is fully isolated from other users. POPIA compliant. We never sell your data, ever.</div></div>
+      <div class="faq-item fade" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-qt">Do I need to be VAT registered to use Zande?</div><div class="faq-ic">+</div></div><div class="faq-a">No. Zande works for both VAT-registered and non-VAT businesses. If you're not registered, invoices simply skip the VAT lines. When you register with SARS, change one setting and everything updates automatically.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="signup" style="padding:120px 0;text-align:center">
+  <div class="wrap-sm">
+    <div class="fade">
+      <h2 style="font-family:var(--fd);font-size:clamp(34px,5.5vw,62px);font-weight:800;line-height:1.05;letter-spacing:-2px;color:var(--t1);margin-bottom:20px">Your business books,<br><span style="background:linear-gradient(120deg,var(--cy),var(--gn));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">done for you. Free.</span></h2>
+      <p style="font-size:17px;color:var(--t2);line-height:1.65;margin-bottom:36px">Join <strong style="color:var(--t1)" id="final-count">247</strong> SA businesses already testing Zande. No spreadsheets. No missing receipts. No payment required.</p>
+      <div class="final-form-box">
+        <div id="ff-fields">
+          <div class="fg2">
+            <div class="fg"><label>First Name</label><input class="fi2" id="f-fn" type="text" placeholder="Sipho"></div>
+            <div class="fg"><label>Last Name</label><input class="fi2" id="f-ln" type="text" placeholder="Khumalo"></div>
+          </div>
+          <div class="fg" style="margin-bottom:9px"><label>Business Email</label><input class="fi2" id="f-em" type="email" placeholder="you@business.co.za" style="width:100%"></div>
+          <div class="fg" style="margin-bottom:9px"><label>WhatsApp / Mobile</label><input class="fi2" id="f-ph" type="tel" placeholder="+27 82 000 0000" style="width:100%"></div>
+          <div class="fg2">
+            <div class="fg"><label>Business Name</label><input class="fi2" id="f-bz" type="text" placeholder="Acme Trading (Pty) Ltd"></div>
+            <div class="fg"><label>Business Size</label>
+              <select class="fi2" id="f-sz"><option value="">Select...</option><option>Just me</option><option>2–5 employees</option><option>6–20 employees</option><option>20+ employees</option></select>
+            </div>
+          </div>
+          <div class="fg" style="margin-bottom:4px"><label>Biggest financial headache</label>
+            <select class="fi2" id="f-pa" style="width:100%"><option value="">Select...</option><option>Chasing late payments</option><option>VAT &amp; SARS compliance</option><option>Understanding cash flow</option><option>Bank reconciliation</option><option>Tracking expenses &amp; receipts</option><option>Getting financial reports</option><option>All of the above</option></select>
+          </div>
+          <button class="submit-btn" id="fSubmit" onclick="finalSignup()">Create My Free Beta Account — No Payment Required →</button>
+          <div id="ff-error" style="display:none;margin-top:10px;padding:12px 16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:10px;font-size:12px;color:#EF4444;line-height:1.5"></div>
+          <p class="form-legal">🔒 Data stays in South Africa &nbsp;·&nbsp; No spam ever &nbsp;·&nbsp; No payments during beta</p>
+        </div>
+        <div class="success-box" id="ff-success" style="margin-top:0">
+          <div class="s-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h3>You're a founding member! 🎉</h3>
+          <p>We'll reach out personally to <strong id="ff-email-conf"></strong> very soon.<br>Know someone who'd benefit? Share the link.</p>
+          <div class="share-row">
+            <button class="share-btn" onclick="shareWA()">📲 WhatsApp</button>
+            <button class="share-btn" onclick="copyLink()">🔗 Copy link</button>
+          </div>
+        </div>
+      </div>
+      <div class="counter-strip">
+        <div class="c-dot"></div>
+        <span class="c-txt"><span class="c-num" id="counter-n">247</span> people already signed up</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-in">
+    <div class="foot-logo">Zande<span>.</span></div>
+    <div class="foot-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="mailto:hello@zande.co.za">hello@zande.co.za</a>
+      <a href="#">🇿🇦 Cape Town, South Africa</a>
+    </div>
+    <div class="foot-note">© 2025 Zande · Data hosted in South Africa · POPIA compliant</div>
+  </div>
+</footer>
+
+<script>
+/* ══ SCREEN SCROLL CAROUSEL ══ */
+const LT = document.getElementById('lt');
+const PT = document.getElementById('pt');
+const L_COUNT = 4, P_COUNT = 4;
+let li = 0, pi = 0;
+
+function sizeScreens() {
+  // Laptop: set each screen height to match the frame
+  const lFrame = document.querySelector('.laptop-screen-frame');
+  if (lFrame) {
+    const lh = lFrame.getBoundingClientRect().height;
+    if (lh > 0) {
+      document.querySelectorAll('#lt .screen-h').forEach(s => {
+        s.style.height = lh + 'px';
+        s.style.minHeight = lh + 'px';
+      });
+    }
+  }
+}
+
+window.addEventListener('load', sizeScreens);
+window.addEventListener('resize', sizeScreens);
+setTimeout(sizeScreens, 100);
+setTimeout(sizeScreens, 500);
+
+// Laptop scrolls vertically using pixel offsets
+function scrollLaptop(idx) {
+  const lFrame = document.querySelector('.laptop-screen-frame');
+  const h = lFrame ? lFrame.getBoundingClientRect().height : 200;
+  LT.style.transform = `translateY(-${idx * h}px)`;
+}
+
+// Phone scrolls horizontally using % — each child is flex:0 0 100% of container
+function scrollPhone(idx) {
+  PT.style.transform = `translateX(-${idx * 100}%)`;
+}
+
+// Laptop: every 4.8s
+setInterval(() => {
+  li = (li + 1) % L_COUNT;
+  scrollLaptop(li);
+}, 4800);
+
+// Phone: every 3.8s, offset 2s so they're out of sync
+setTimeout(() => {
+  setInterval(() => {
+    pi = (pi + 1) % P_COUNT;
+    scrollPhone(pi);
+  }, 3800);
+}, 2000);
+
+/* ══ COUNTER ══ */
+let count = parseInt(localStorage.getItem('z_c') || '247');
+function syncCount(n) {
+  ['hero-count','stat-n','final-count','counter-n'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = id === 'stat-n' ? n.toLocaleString() + '+' : n.toLocaleString();
+  });
+}
+syncCount(count);
+setInterval(() => { count++; localStorage.setItem('z_c', count); syncCount(count); },
+  58000 + Math.random() * 62000);
+
+/* ══ SUPABASE → NOTION signup ══ */
+const NOTION_PROXY = 'https://mmdzzmijlpmrbkbtyuhi.supabase.co/functions/v1/notion-signup';
+
+async function sendToNotion(payload) {
+  let res;
+  try {
+    res = await fetch(NOTION_PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (networkErr) {
+    // Network failure — if testing from file:// this is expected
+    // Try again with no-cors mode to at least fire the request
+    console.warn('Fetch failed, retrying with no-cors:', networkErr.message);
+    try {
+      await fetch(NOTION_PROXY, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      // no-cors returns opaque response — assume ok
+      return { ok: true };
+    } catch (e) {
+      throw new Error('Network error — please test from the Vercel URL, not a local file. ' + networkErr.message);
+    }
+  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+/* ══ FULL SIGNUP FORM ══ */
+async function finalSignup() {
+  const first = document.getElementById('f-fn')?.value.trim() || '';
+  const last  = document.getElementById('f-ln')?.value.trim() || '';
+  const email = document.getElementById('f-em')?.value.trim() || '';
+  const phone = document.getElementById('f-ph')?.value.trim() || '';
+  const biz   = document.getElementById('f-bz')?.value.trim() || '';
+  const size  = document.getElementById('f-sz')?.value || '';
+  const pain  = document.getElementById('f-pa')?.value || '';
+
+  if (!first) { shake('f-fn'); return; }
+  if (!email || !email.includes('@')) { shake('f-em'); return; }
+
+  const btn = document.getElementById('fSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Saving your details…';
+
+  try {
+    await sendToNotion({
+      name: `${first} ${last}`.trim(),
+      email, phone,
+      business: biz,
+      size, pain,
+      source: 'final_form',
+      signed_up_at: new Date().toISOString()
+    });
+
+    // Only reach here if Notion confirmed the write
+    count++;
+    localStorage.setItem('z_c', count);
+    syncCount(count);
+    localStorage.setItem('z_up', '1');
+    localStorage.setItem('z_em', email);
+    localStorage.setItem('z_nm', first);
+    localStorage.setItem('z_notion_confirmed', '1');
+    document.getElementById('ff-email-conf').textContent = email;
+    document.getElementById('ff-fields').style.display = 'none';
+    document.getElementById('ff-success').style.display = 'block';
+
+  } catch (err) {
+    // Show the actual error so we can debug
+    btn.disabled = false;
+    btn.textContent = 'Create My Free Beta Account — No Payment Required →';
+    const errBox = document.getElementById('ff-error');
+    if (errBox) {
+      errBox.textContent = 'Something went wrong: ' + err.message + ' — please try again or email hello@zande.co.za';
+      errBox.style.display = 'block';
+    }
+    console.error('Signup error:', err);
+  }
+}
+
+// Clear any stale signup state from previous failed tests
+// Remove this block after launch
+if (localStorage.getItem('z_up') && !localStorage.getItem('z_notion_confirmed')) {
+  localStorage.removeItem('z_up');
+  localStorage.removeItem('z_em');
+  localStorage.removeItem('z_nm');
+}
+
+if (localStorage.getItem('z_up')) {
+  const em = localStorage.getItem('z_em') || '';
+  const ffs = document.getElementById('ff-fields'); if(ffs) ffs.style.display='none';
+  const fss = document.getElementById('ff-success'); if(fss) fss.style.display='block';
+  const ffc = document.getElementById('ff-email-conf'); if(ffc) ffc.textContent=em;
+}
+
+function shake(id) {
+  const el = document.getElementById(id);
+  el.style.borderColor = 'var(--rd)'; el.focus();
+  el.animate([{transform:'translateX(0)'},{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'translateX(0)'}],{duration:360,iterations:2});
+  setTimeout(() => el.style.borderColor = '', 2500);
+}
+
+function toggleFaq(item) {
+  const a = item.querySelector('.faq-a'), ic = item.querySelector('.faq-ic');
+  const open = a.style.display === 'block';
+  document.querySelectorAll('.faq-a').forEach(x => x.style.display='none');
+  document.querySelectorAll('.faq-ic').forEach(x => x.textContent='+');
+  if (!open) { a.style.display='block'; ic.textContent='−'; }
+}
+
+function shareWA() { window.open('https://wa.me/?text=' + encodeURIComponent('Just signed up for Zande — accounting made easy for everyone in SA. Free beta access, no payment needed: ' + window.location.href), '_blank'); }
+function copyLink() { navigator.clipboard?.writeText(window.location.href).then(()=>alert('Copied!')).catch(()=>alert(window.location.href)); }
+
+/* ══ MINI TESTIMONIAL CAROUSEL (below hero) ══ */
+let mtIdx = 0;
+const MT_COUNT = 5;
+const mtTrack = document.getElementById('mtTrack');
+
+function mtGo(idx) {
+  mtIdx = (idx + MT_COUNT) % MT_COUNT;
+  if (mtTrack) mtTrack.style.transform = `translateX(-${mtIdx * 100}%)`;
+  document.querySelectorAll('.mt-dot').forEach((d, i) => d.classList.toggle('on', i === mtIdx));
+}
+function mtNext() { mtGo(mtIdx + 1); }
+
+// Auto-advance every 4s, offset 1.5s from main carousel
+setTimeout(() => {
+  let mtAuto = setInterval(() => mtNext(), 4000);
+  const mtEl = document.querySelector('.mini-testi');
+  if (mtEl) {
+    mtEl.addEventListener('mouseenter', () => clearInterval(mtAuto));
+    mtEl.addEventListener('mouseleave', () => { mtAuto = setInterval(() => mtNext(), 4000); });
+  }
+}, 1500);
+
+/* ══ TESTIMONIAL CAROUSEL ══ */
+let tIdx = 0;
+const T_COUNT = 6;
+const tTrack = document.getElementById('tTrack');
+
+function tGo(idx) {
+  tIdx = (idx + T_COUNT) % T_COUNT;
+  if (tTrack) tTrack.style.transform = `translateX(-${tIdx * 100}%)`;
+  document.querySelectorAll('.tcarousel-dot').forEach((d, i) => d.classList.toggle('on', i === tIdx));
+}
+function tNext() { tGo(tIdx + 1); }
+function tPrev() { tGo(tIdx - 1); }
+
+// Auto-advance every 3.5s
+let tAuto = setInterval(() => tNext(), 3500);
+// Pause on hover
+const tCarousel = document.querySelector('.testi-carousel');
+if (tCarousel) {
+  tCarousel.addEventListener('mouseenter', () => clearInterval(tAuto));
+  tCarousel.addEventListener('mouseleave', () => { tAuto = setInterval(() => tNext(), 3500); });
+}
+
+/* ══ SCROLL REVEAL ══ */
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('vis'), i * 70); obs.unobserve(e.target); }
+  });
+}, { threshold: .07, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+
+/* ══ NAV HIDE ON SCROLL DOWN ══ */
+let ly = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY, nav = document.querySelector('nav');
+  nav.style.transform = y > ly && y > 80 ? 'translateY(-100%)' : 'translateY(0)';
+  nav.style.transition = 'transform .25s ease';
+  ly = y;
+}, { passive: true });
+</script>
+</body>
+</html>
