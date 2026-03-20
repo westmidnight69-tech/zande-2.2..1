@@ -1637,6 +1637,8 @@ footer{border-top:1px solid var(--bd);padding:40px 0}
             <button class="share-btn" onclick="shareWA()">📲 WhatsApp</button>
             <button class="share-btn" onclick="copyLink()">🔗 Copy link</button>
           </div>
+          <!-- Testing only — remove before launch -->
+          <button onclick="resetForm()" style="margin-top:16px;background:transparent;border:1px solid var(--bd);border-radius:8px;padding:8px 18px;font-size:12px;color:var(--t3);cursor:pointer;font-family:var(--fm)">↩ Submit another (testing)</button>
         </div>
       </div>
       <div class="counter-strip">
@@ -1797,21 +1799,6 @@ async function finalSignup() {
     document.getElementById('ff-fields').style.display = 'none';
     document.getElementById('ff-success').style.display = 'block';
 
-    // Reset after 4s for repeat testing — remove before launch
-    setTimeout(() => {
-      document.getElementById('ff-fields').style.display = 'block';
-      document.getElementById('ff-success').style.display = 'none';
-      btn.disabled = false;
-      btn.textContent = 'Create My Free Beta Account — No Payment Required →';
-      document.getElementById('f-fn').value = '';
-      document.getElementById('f-ln').value = '';
-      document.getElementById('f-em').value = '';
-      document.getElementById('f-ph').value = '';
-      document.getElementById('f-bz').value = '';
-      document.getElementById('f-sz').value = '';
-      document.getElementById('f-pa').value = '';
-    }, 4000);
-
   } catch (err) {
     // Show the actual error so we can debug
     btn.disabled = false;
@@ -1837,6 +1824,18 @@ if (false) { // disabled for testing
   const ffs = document.getElementById('ff-fields'); if(ffs) ffs.style.display='none';
   const fss = document.getElementById('ff-success'); if(fss) fss.style.display='block';
   const ffc = document.getElementById('ff-email-conf'); if(ffc) ffc.textContent=em;
+}
+
+function resetForm() {
+  const btn = document.getElementById('fSubmit');
+  btn.disabled = false;
+  btn.textContent = 'Create My Free Beta Account — No Payment Required →';
+  ['f-fn','f-ln','f-em','f-ph','f-bz'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  ['f-sz','f-pa'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  document.getElementById('ff-fields').style.display = 'block';
+  document.getElementById('ff-success').style.display = 'none';
+  const errBox = document.getElementById('ff-error');
+  if (errBox) errBox.style.display = 'none';
 }
 
 function shake(id) {
