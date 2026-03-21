@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zande — Accounting Made Easy for Everyone</title>
+<title>Zande — Accounting Automated</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -33,8 +33,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 nav{position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(0,0,0,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd)}
 .nav-in{max-width:1200px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--t1);text-decoration:none;display:flex;align-items:center;gap:7px}
-.logo-dot{width:7px;height:7px;border-radius:50%;background:var(--cy);animation:blink 2.4s ease infinite}
+.logo{text-decoration:none;display:flex;align-items:center;gap:9px}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:#22D3EE;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:20px;font-weight:800;color:#000;
+  flex-shrink:0}
+.logo-text{display:flex;flex-direction:column;gap:1px}
+.logo-word{font-family:var(--fd);font-size:20px;font-weight:800;color:var(--t1);
+  letter-spacing:-.5px;line-height:1}
+.logo-slogan{font-family:var(--fm);font-size:7.5px;font-weight:600;color:#22D3EE;
+  letter-spacing:2px;text-transform:uppercase;line-height:1}
+.logo-dot{display:none}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 .nav-r{display:flex;align-items:center;gap:10px}
 .nav-pill{font-family:var(--fm);font-size:9px;letter-spacing:1.5px;color:var(--gn);
@@ -201,9 +210,9 @@ h1.hero-h{font-family:var(--fd);font-size:clamp(42px,5.5vw,72px);font-weight:800
 /* sidebar */
 .sb{width:56px;background:#0d0d0d;border-right:1px solid #1e1e1e;
   display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px;flex-shrink:0}
-.sb-logo{width:32px;height:32px;border-radius:9px;background:rgba(34,211,238,.12);
-  border:1px solid rgba(34,211,238,.2);display:flex;align-items:center;justify-content:center;
-  font-family:var(--fd);font-size:10px;font-weight:800;color:#22D3EE;margin-bottom:8px}
+.sb-logo{width:32px;height:32px;border-radius:9px;background:#22D3EE;
+  border:none;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:16px;font-weight:800;color:#000;margin-bottom:8px}
 .sbi{width:34px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sbi.on{background:rgba(34,211,238,.1)}
 .sbi svg{width:14px;height:14px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -673,7 +682,9 @@ footer{border-top:1px solid var(--bd);padding:40px 0}
 @media(max-width:640px){
   .wrap,.wrap-sm{padding:0 16px}
   .nav-in{padding:0 16px;height:56px}
-  .logo{font-size:18px}
+  .logo-word{font-size:17px}
+  .logo-slogan{font-size:6.5px;letter-spacing:1.5px}
+  .logo-mark{width:29px;height:29px;font-size:17px;border-radius:8px}
   .nav-cta{padding:8px 16px;font-size:12px}
 
   /* hero */
@@ -784,7 +795,13 @@ footer{border-top:1px solid var(--bd);padding:40px 0}
 
 <nav>
   <div class="nav-in">
-    <a class="logo" href="#">Zande<div class="logo-dot"></div></a>
+    <a class="logo" href="#">
+      <div class="logo-mark">Z</div>
+      <div class="logo-text">
+        <span class="logo-word">ande</span>
+        <span class="logo-slogan">Accounting Automated</span>
+      </div>
+    </a>
     <div class="nav-r">
       <span class="nav-pill">Free beta testing access</span>
       <button class="nav-cta" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Create Free Account</button>
@@ -1651,7 +1668,15 @@ footer{border-top:1px solid var(--bd);padding:40px 0}
 
 <footer>
   <div class="foot-in">
-    <div class="foot-logo">Zande<span>.</span></div>
+    <div class="foot-logo">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:28px;height:28px;border-radius:8px;background:#22D3EE;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;font-weight:800;color:#000;flex-shrink:0">Z</div>
+        <div style="display:flex;flex-direction:column;gap:1px">
+          <span style="font-family:var(--fd);font-size:17px;font-weight:800;color:var(--t3);letter-spacing:-.5px;line-height:1">ande</span>
+          <span style="font-family:var(--fm);font-size:7px;font-weight:600;color:#22D3EE;letter-spacing:2px;text-transform:uppercase;line-height:1">Accounting Automated</span>
+        </div>
+      </div>
+    </div>
     <div class="foot-links">
       <a href="#">Privacy Policy</a>
       <a href="#">Terms of Service</a>
